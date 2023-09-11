@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Board from "./Board";
 import History from "./History";
 
@@ -6,7 +6,7 @@ function Game() {
     const [nextMove, setNextMove] = useState(0);
     const [squares, setSquares] = useState(new Array(9).fill(null));
     const [history, setHistory] = useState([]);
-    const [timeTravelState, settimeTravelState] = useState(-1);
+    const [timeTravelState, settimeTravelState] = useState(null);
     const nextMoveHandler = () => {
       // 0 for o user and 1 for x user
       setNextMove(nextMove === 0 ? 1 : 0);
@@ -24,13 +24,14 @@ function Game() {
           ...squares.slice(squareCount + 1),
         ];
         setSquares(changedArr);
+        console.log(squares)
       } else {
         setSquares(squares);
       }
     };
   
     const historyHandler = (squaresHistory,resetedHistory) => {
-        console.log(squaresHistory)
+      console.log(squaresHistory,resetedHistory)
         resetedHistory ? setHistory([...resetedHistory, squaresHistory]) : setHistory([...history, squaresHistory]);
     };
   
@@ -47,18 +48,21 @@ function Game() {
       if (timeTravelState < 0) {
         resetedHistoryArr = [];
       } else {
-        console.log(history)
+        console.log(history,"history")
         resetedHistoryArr = history.slice(0, timeTravelState + 1);
       }
       return resetedHistoryArr
     };
-  
+  useEffect(()=>{
+    console.log("history inside game useEffect",history)
+  },[history])
     return (
       <div>
         <h1 className="game_title">Tic Tac Toe Game </h1>
         <div className="gameContents">
           <Board
             nextMove={nextMove}
+            history={history}
             nextMoveHandler={nextMoveHandler}
             timeTravelState={timeTravelState}
             resetTimeTravelState={resetTimeTravelState}

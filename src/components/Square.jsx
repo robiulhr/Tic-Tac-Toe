@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import checkWinner from "../Utils/Utils";
 
 function Square({
@@ -8,19 +9,21 @@ function Square({
   squareCount,
   squareHandler,
   winner,
+  history,
   winnerHandler,
   historyHandler,
   resetHistoryHandler,
 }) {
   const squareClickHandler = () => {
     if (!squares[squareCount] && !winner) {
+      // console.log("history in square page start",history)
       nextMoveHandler();
       squareHandler(false, squares, squareCount);
       let resetedHistory;
       if (typeof timeTravelState === "number" && timeTravelState !== null) {
+        // console.log("history outiside resetHistoryHandler in square page",history)
         resetedHistory = resetHistoryHandler(timeTravelState);
         resetTimeTravelState();
-        console.log(resetedHistory);
       }
       resetedHistory
         ? historyHandler(squares, resetedHistory)
