@@ -11,6 +11,7 @@ function Board({
   squares,
   squareHandler,
   resetHistoryHandler,
+  makeMove
 }) {
   const [winner, setWinner] = useState();
   const winnerHandler = (winner) => {
@@ -47,6 +48,7 @@ function Board({
               winnerHandler={winnerHandler}
               historyHandler={historyHandler}
               resetHistoryHandler={resetHistoryHandler}
+              makeMove={makeMove}
             />
             squareIndex++
             return squareElement

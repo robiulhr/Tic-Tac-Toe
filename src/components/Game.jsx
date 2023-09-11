@@ -13,20 +13,21 @@ function Game() {
     };
   
     const squareHandler = (fromHistory, squares, squareCount) => {
+      const newSquare = squares;
       if (!fromHistory) {
         const changedElement =
           nextMove === 0
-            ? (squares[squareCount] = "O")
-            : (squares[squareCount] = "X");
+            ? (newSquare[squareCount] = "O")
+            : (newSquare[squareCount] = "X");
         const changedArr = [
-          ...squares.slice(0, squareCount),
+          ...newSquare.slice(0, squareCount),
           changedElement,
-          ...squares.slice(squareCount + 1),
+          ...newSquare.slice(squareCount + 1),
         ];
         setSquares(changedArr);
-        console.log(squares)
+        console.log(newSquare)
       } else {
-        setSquares(squares);
+        setSquares(newSquare);
       }
     };
   
@@ -53,6 +54,23 @@ function Game() {
       }
       return resetedHistoryArr
     };
+  const makeMove = (currentMove, traveling) => {
+    const newSquare = [...squares];
+    // console.log('current move...', currentMove);return;
+    const changedElement =
+        nextMove === 0
+            ? (newSquare[currentMove] = "O")
+            : (newSquare[currentMove] = "X");
+        const changedArr = [
+            ...newSquare.slice(0, currentMove),
+            changedElement,
+            ...newSquare.slice(currentMove + 1),
+        ];
+    traveling ? setHistory([...history.slice(0, timeTravelState + 1), changedArr]) : setHistory([...history, changedArr]);
+
+    setSquares(changedArr);
+    return;
+  }
   useEffect(()=>{
     console.log("history inside game useEffect",history)
   },[history])
@@ -70,6 +88,7 @@ function Game() {
             squares={squares}
             squareHandler={squareHandler}
             resetHistoryHandler={resetHistoryHandler}
+            makeMove={makeMove}
           />
           <History
             timeTravelStateHandler={timeTravelStateHandler}

@@ -13,22 +13,21 @@ function Square({
   winnerHandler,
   historyHandler,
   resetHistoryHandler,
+  makeMove,
 }) {
   const squareClickHandler = () => {
     if (!squares[squareCount] && !winner) {
       // console.log("history in square page start",history)
       nextMoveHandler();
-      squareHandler(false, squares, squareCount);
-      let resetedHistory;
+      
+      let traveling = false;
+
       if (typeof timeTravelState === "number" && timeTravelState !== null) {
-        // console.log("history outiside resetHistoryHandler in square page",history)
-        resetedHistory = resetHistoryHandler(timeTravelState);
-        resetTimeTravelState();
+        traveling = true;
       }
-      resetedHistory
-        ? historyHandler(squares, resetedHistory)
-        : historyHandler(squares);
-      // check if any winner found
+      
+      makeMove(squareCount, traveling);
+
       const gotWinner = checkWinner(squares);
       if (gotWinner) winnerHandler(squares[squareCount]);
       else {
