@@ -1,17 +1,10 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Square from "./Square";
 
 function Board({
   nextMove,
-  nextMoveHandler,
-  timeTravelState,
-  resetTimeTravelState,
-  historyHandler,
-  history,
+  makeMove,
   squares,
-  squareHandler,
-  resetHistoryHandler,
-  makeMove
 }) {
   const [winner, setWinner] = useState();
   const winnerHandler = (winner) => {
@@ -32,28 +25,25 @@ function Board({
           <h3> {nextMoveTitle}</h3>
         )}
       </div>
-      {squareRows.map((ele,ind) => {
-        return <div key={ind} className="row">
-          {ele.map((element,index) => {
-            const squareElement =  <Square
-              key={squareIndex}
-              nextMoveHandler={nextMoveHandler}
-              timeTravelState={timeTravelState}
-              resetTimeTravelState={resetTimeTravelState}
-              squares={squares}
-              history={history}
-              squareCount={squareIndex}
-              squareHandler={squareHandler}
-              winner={winner}
-              winnerHandler={winnerHandler}
-              historyHandler={historyHandler}
-              resetHistoryHandler={resetHistoryHandler}
-              makeMove={makeMove}
-            />
-            squareIndex++
-            return squareElement
-          })}
-        </div>;
+      {squareRows.map((ele, ind) => {
+        return (
+          <div key={ind} className="row">
+            {ele.map((element, index) => {
+              const squareElement = (
+                <Square
+                  key={squareIndex}
+                  squares={squares}
+                  makeMove={makeMove}
+                  squareCount={squareIndex}
+                  winner={winner}
+                  winnerHandler={winnerHandler}
+                />
+              );
+              squareIndex++;
+              return squareElement;
+            })}
+          </div>
+        );
       })}
     </div>
   );

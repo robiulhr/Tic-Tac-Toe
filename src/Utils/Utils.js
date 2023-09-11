@@ -26,4 +26,5 @@ function checkWinner(squares) {
     return winner;
   }
 
+
   export default checkWinner

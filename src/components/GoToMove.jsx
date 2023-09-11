@@ -2,13 +2,10 @@ import { useEffect } from "react";
 
 function GoToMove({
     moveCount,
-    timeTravelStateHandler,
-    history,
-    squareHandler,
+    timeTravelHandler,
   }) {
     const goToMoveHandler = () => {
-      timeTravelStateHandler(moveCount);
-      squareHandler(true, history[moveCount]);
+      timeTravelHandler(moveCount);
     };
     const buttonText = `Go to move #${moveCount + 1}`;
     return (

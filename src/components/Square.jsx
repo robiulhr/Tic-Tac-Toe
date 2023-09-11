@@ -2,32 +2,16 @@ import { useEffect } from "react";
 import checkWinner from "../Utils/Utils";
 
 function Square({
-  nextMoveHandler,
-  timeTravelState,
-  resetTimeTravelState,
   squares,
   squareCount,
-  squareHandler,
-  winner,
-  history,
-  winnerHandler,
-  historyHandler,
-  resetHistoryHandler,
   makeMove,
+  winner,
+  winnerHandler,
 }) {
   const squareClickHandler = () => {
     if (!squares[squareCount] && !winner) {
-      // console.log("history in square page start",history)
-      nextMoveHandler();
-      
-      let traveling = false;
-
-      if (typeof timeTravelState === "number" && timeTravelState !== null) {
-        traveling = true;
-      }
-      
-      makeMove(squareCount, traveling);
-
+      makeMove(squareCount)
+      // check if any winner found
       const gotWinner = checkWinner(squares);
       if (gotWinner) winnerHandler(squares[squareCount]);
       else {
