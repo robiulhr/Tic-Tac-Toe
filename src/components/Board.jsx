@@ -1,11 +1,16 @@
 import { useState } from "react";
 import Square from "./Square";
+import Timer from "./Timer";
 
 function Board({
   nextMove,
   makeMove,
   squares,
-  winner
+  winner,
+  timerEnabled,
+  timerRunning,
+  timerHandler,
+  timerValue
 }) {
   const winnerTitle = winner && winner !== "Draw" && `Winner : ${winner}`;
   const drawTitle = winner === "Draw" && `Result: Draw`;
@@ -22,6 +27,9 @@ function Board({
           <h3> {nextMoveTitle}</h3>
         )}
       </div>
+      {timerEnabled && (
+        <Timer timerHandler={timerHandler} timerRunning={timerRunning} timerValue={timerValue} />
+      )}
       {squareRows.map((ele, ind) => {
         return (
           <div key={ind} className="row">

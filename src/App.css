@@ -54,7 +54,40 @@ body{
   padding: 40px;
 }
 
-
 .goToMove{
+  display: flex;
   margin: 10px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.goToMove button:not(:first-child){
+  margin: 3px;
+  background: rgb(198, 240, 240);
+  color: rgb(41, 41, 41);
+}
+.history button ,.goToMove button{
+  min-width: 200px;
+}
+
+
+
+
+/* ======================== */
+
+.home_wrapper h1,.home_wrapper h3{
+  margin: 20px;
+  text-align: center;
+}
+
+.play_options{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.play_options button{
+  margin: 10px;
+  min-width: 200px;
 }

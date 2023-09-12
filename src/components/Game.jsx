@@ -9,7 +9,14 @@ function Game() {
   const [squares, setSquares] = useState(new Array(9).fill(null));
   const [history, setHistory] = useState([]);
   const [timeTravelState, settimeTravelState] = useState(null);
+  const [timerEnabled, setTimerEnabled] = useState(true);
+  const [timerRunning, setTimerRunning] = useState("stoped");
+  const [timerValue, setTimerValue] = useState(null);
   const [winner, setWinner] = useState();
+
+  const timerHandler = function (state) {
+    setTimerRunning(state);
+  };
 
   const makeMove = function (squareCount) {
     if (!squares[squareCount] && !winner) {
@@ -74,6 +81,26 @@ function Game() {
     }
   });
 
+  // handle timer
+  useEffect(() => {
+    if (timerRunning === "running") {
+      setTimerValue(0);
+    }
+  }, [timerRunning]);
+
+  useEffect(() => {
+    let intervalId;
+    if (timerValue !== null && timerRunning === "running") {
+      intervalId = setInterval(() => {
+        const newTimerValue = timerValue + 1;
+        setTimerValue(newTimerValue);
+      }, 1000);
+    }
+    return () => {
+      intervalId && clearInterval(intervalId);
+    };
+  }, [timerValue]);
+
   return (
     <div className="game_wrapper">
       <div className="title">
@@ -85,12 +112,18 @@ function Game() {
           makeMove={makeMove}
           squares={squares}
           winner={winner}
+          timerEnabled={timerEnabled}
+          timerRunning={timerRunning}
+          timerHandler={timerHandler}
+          timerValue={timerValue}
         />
-        {
-          history.length > 0 && <History timeTravelHandler={timeTravelHandler} history={history} />
-        }
+        {history.length > 0 && (
+          <History timeTravelHandler={timeTravelHandler} history={history} />
+        )}
       </div>
-      <div className="gameContents_bottom">{winner && <PlayAgain playAgainHandler={playAgainHandler} />}</div>
+      <div className="gameContents_bottom">
+        {winner && <PlayAgain playAgainHandler={playAgainHandler} />}
+      </div>
     </div>
   );
 }
