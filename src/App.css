@@ -12,10 +12,16 @@ body{
   background-color:#282c34;
   color:white;
 }
+.game_wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 .game_title{
   text-align: center;
 }
-.gameContents{
+.gameContents_upper{
   display: flex;
   align-items: start;
   justify-content: center;

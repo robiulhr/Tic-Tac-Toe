@@ -1,15 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Square from "./Square";
 
 function Board({
   nextMove,
   makeMove,
   squares,
+  winner
 }) {
-  const [winner, setWinner] = useState();
-  const winnerHandler = (winner) => {
-    setWinner(winner);
-  };
   const winnerTitle = winner && winner !== "Draw" && `Winner : ${winner}`;
   const drawTitle = winner === "Draw" && `Result: Draw`;
   const nextMoveTitle = `Next Player Move: ${nextMove ? "X" : "O"}`;
@@ -35,8 +32,6 @@ function Board({
                   squares={squares}
                   makeMove={makeMove}
                   squareCount={squareIndex}
-                  winner={winner}
-                  winnerHandler={winnerHandler}
                 />
               );
               squareIndex++;
