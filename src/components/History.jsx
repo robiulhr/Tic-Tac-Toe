@@ -1,6 +1,23 @@
 import GoToMove from "./GoToMove";
+import { useTimeTravelStateDispatchContext } from "../context/GameContexts/TimeTravelContext";
+import { useDispatchNextMove } from "../context/GameContexts/PlayerMoveContext";
+import { useHistoriesContext } from "../context/GameContexts/HistoryContext";
+function History() {
+  const dispatchTimeTravelState = useTimeTravelStateDispatchContext();
+  const dispatchNextMove = useDispatchNextMove();
+  const history = useHistoriesContext();
+  // define timeTravelHandler function
+  const timeTravelHandler = (moveCount) => {
+    if (moveCount < 0) {
+      dispatchSquares(new Array(9).fill(null));
+      dispatchNextMove(0);
+    } else {
+      dispatchSquares(history[moveCount].square);
+      dispatchNextMove(history[moveCount].nextMove);
+    }
+    dispatchTimeTravelState(moveCount);
+  };
 
-function History({ timeTravelHandler, history }) {
   const goToGameStartHandler = () => {
     timeTravelHandler(-1);
   };

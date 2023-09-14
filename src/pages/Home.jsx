@@ -7,7 +7,7 @@ function Home() {
       <h3>How do you want to play?</h3>
       <div className="play_options">
         <Link to={`chooseplaytilescount`}>
-          <button>Play Alone</button>
+          <button>Play Dual</button>
         </Link>
         <Link to={`chooseplaytilescount`}>
           <button>Play With Computer</button>

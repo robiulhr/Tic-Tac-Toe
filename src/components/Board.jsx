@@ -1,23 +1,19 @@
-import { useState } from "react";
 import Square from "./Square";
 import Timer from "./Timer";
+import { useWinnerContext } from "../context/GameContexts/WinnerContext";
+import { useMoveContext } from "../context/GameContexts/PlayerMoveContext";
+import { useTimerContext } from "../context/GameContexts/TimerContext";
 
-function Board({
-  nextMove,
-  makeMove,
-  squares,
-  winner,
-  timerEnabled,
-  timerRunning,
-  timerHandler,
-  timerValue
-}) {
+function Board() {
+  const winner = useWinnerContext()
+  const nextMove = useMoveContext()
+  const timer = useTimerContext()
   const winnerTitle = winner && winner !== "Draw" && `Winner : ${winner}`;
   const drawTitle = winner === "Draw" && `Result: Draw`;
   const nextMoveTitle = `Next Player Move: ${nextMove ? "X" : "O"}`;
   const squareRows = new Array(3).fill(new Array(3).fill(null));
   let squareIndex = 0;
-
+  
   return (
     <div className="board">
       <div>
@@ -27,8 +23,8 @@ function Board({
           <h3> {nextMoveTitle}</h3>
         )}
       </div>
-      {timerEnabled && (
-        <Timer timerHandler={timerHandler} timerRunning={timerRunning} timerValue={timerValue} />
+      {timer.timerEnabled && (
+        <Timer />
       )}
       {squareRows.map((ele, ind) => {
         return (
@@ -37,9 +33,7 @@ function Board({
               const squareElement = (
                 <Square
                   key={squareIndex}
-                  squares={squares}
-                  makeMove={makeMove}
-                  squareCount={squareIndex}
+                  squareIndex={squareIndex}
                 />
               );
               squareIndex++;

@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function GoToMove({ moveCount, timeTravelHandler }) {
   const [timeTakenBtnShown, setTimeTakenBtnShown] = useState(false);
+
   const goToMoveHandler = () => {
     timeTravelHandler(moveCount);
     setTimeTakenBtnShown(!timeTakenBtnShown);

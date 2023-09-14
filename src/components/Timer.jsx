@@ -1,21 +1,47 @@
-function Timer({ timerHandler, timerRunning,timerValue }) {
+import { useEffect } from "react";
+import {
+  useTimerContext,
+  useTimerDispatchContext,
+} from "../context/GameContexts/TimerContext";
+
+function Timer() {
+  const [timer, dispatchTimer] = [useTimerContext(), useTimerDispatchContext()];
+  const { timerValue, timerStatus, timerEnabled } = timer;
+  useEffect(() => {
+    let intervalId;
+    if (timerValue !== null && timerStatus === "running") {
+      intervalId = setInterval(() => {
+        const newTimerValue = timerValue + 1;
+        dispatchTimer({
+          type: "setValue",
+          timerValue: newTimerValue,
+        });
+      }, 1000);
+    }
+    return () => {
+      intervalId && clearInterval(intervalId);
+    };
+  }, [timerStatus, timerValue]);
+
   return (
     <div>
-      {timerRunning === "stoped" && (
+      {timerStatus === "stoped" && (
         <button
           onClick={() => {
-            timerHandler("running");
+            dispatchTimer({
+              type: "start",
+            });
           }}
         >
           Start Timer
         </button>
       )}
 
-      {timerRunning === "running" && (
+      {timerStatus === "running" && (
         <>
           <button
             onClick={() => {
-              timerHandler("stoped");
+              dispatchTimer({ type: "stop" });
             }}
           >
             Stop Timer

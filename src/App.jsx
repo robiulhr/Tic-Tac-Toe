@@ -1,5 +1,5 @@
 import "./App.css";
-import PlayAlone from './pages/PlayAlone'
+import PlayDual from './pages/PlayDual'
 import PlayWithComputer from './pages/PlayWithComputer'
 import PlayWithAFriend from './pages/PlayWithAFriend'
 import Home from './pages/Home'
@@ -16,8 +16,8 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: "/playalone",
-    element: <PlayAlone />,
+    path: "/playdual",
+    element: <PlayDual />,
   },
   {
     path: "/playwithcomputer",
