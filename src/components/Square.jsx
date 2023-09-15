@@ -6,12 +6,16 @@ import {
 import {
   useGameSquaresContext,
   useGameSquaresDispatchContext,
+  getUpdatedSquares,
 } from "../context/GameContexts/GameSquareContext";
 import {
   useTimeTravelContext,
   useTimeTravelStateDispatchContext,
 } from "../context/GameContexts/TimeTravelContext";
-import { useHistoriesDispatchContext } from "../context/GameContexts/HistoryContext";
+import {
+  useHistoriesContext,
+  useHistoriesDispatchContext,
+} from "../context/GameContexts/HistoryContext";
 import {
   useWinnerContext,
   useWinnerDispatchContext,
@@ -27,7 +31,10 @@ function Square({ squareIndex }) {
     useGameSquaresContext(),
     useGameSquaresDispatchContext(),
   ];
-  const [dispatchHistories] = [useHistoriesDispatchContext()];
+  const [histories, dispatchHistories] = [
+    useHistoriesContext(),
+    useHistoriesDispatchContext()
+  ];
   const [timeTravelState, dispatchtimeTravelState] = [
     useTimeTravelContext(),
     useTimeTravelStateDispatchContext(),
@@ -40,17 +47,22 @@ function Square({ squareIndex }) {
   const makeMove = function (squareIndex) {
     if (!squares[squareIndex] && !winner) {
       // set next move
-      dispatchNextMove();
+      dispatchNextMove({ type: "next", currentMove: nextMove });
       // dispatch square
       dispatchSquares({ type: "set", nextMove, squareIndex });
+      const newSquares = getUpdatedSquares(squares, {
+        type: "set",
+        nextMove,
+        squareIndex,
+      });
       // reset timetravel state
       dispatchtimeTravelState(null);
       // set the history
       const newHistoryObj = {
-        squares,
+        squares: newSquares,
         nextMove,
       };
-      dispatchHistories({ type:"add",newHistoryObj, timeTravelState });
+      dispatchHistories({ type: "add", newHistoryObj, timeTravelState });
     }
   };
   useEffect(() => {
@@ -71,6 +83,7 @@ function Square({ squareIndex }) {
       isLastMove && dispatchWinner("Draw");
     }
   });
+
   return (
     <div className="square">
       <button

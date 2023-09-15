@@ -6,7 +6,7 @@ const GameSquaresDispatchContext = createContext(null);
 const initialSquares = new Array(9).fill(null);
 const squaresReducer = (squares, action) => {
   if (!action) throw Error("Please, provide the reducer action");
-  const { type, nextMove, squareIndex } = action;
+  const { type, nextMove, squareIndex,historySqures } = action;
   switch (type) {
     case "reset":
       return new Array(9).fill(null);
@@ -17,10 +17,14 @@ const squaresReducer = (squares, action) => {
         changedElement,
         ...squares.slice(squareIndex + 1),
       ];
+    case "timeTravel":
+      return historySqures
     default:
       throw Error("Unknown action: " + type);
   }
 };
+// access updatedSquares
+export const getUpdatedSquares = squaresReducer;
 
 export default function SquaresProvider({ children }) {
   const [squares, dispatchSquares] = useReducer(squaresReducer, initialSquares);

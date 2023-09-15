@@ -10,14 +10,16 @@ const historyReducer = (histories, action) => {
   switch (type) {
     case "add":
       return timeTravelState !== null && typeof timeTravelState == "number"
-        ? [...histories.slice(0, timeTravelState + 1), newHistoryObj]
-        : [...histories, newHistoryObj];
+          ? [...histories.slice(0, timeTravelState + 1), newHistoryObj]
+          : [...histories, newHistoryObj];
     case "erase":
       return [];
     default:
       throw Error("Unknown action: " + action.type);
   }
 };
+// access the updated history
+export const getUpdatedHistories = historyReducer;
 
 export default function HistoryProvider({ children }) {
   const [histories, dispatchHistories] = useReducer(

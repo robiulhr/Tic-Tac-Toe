@@ -1,23 +1,42 @@
 import GoToMove from "./GoToMove";
-import { useTimeTravelStateDispatchContext } from "../context/GameContexts/TimeTravelContext";
+import {
+  useTimeTravelContext,
+  useTimeTravelStateDispatchContext,
+} from "../context/GameContexts/TimeTravelContext";
 import { useDispatchNextMove } from "../context/GameContexts/PlayerMoveContext";
 import { useHistoriesContext } from "../context/GameContexts/HistoryContext";
+import { useGameSquaresDispatchContext } from "../context/GameContexts/GameSquareContext";
+import { useState } from "react";
 function History() {
-  const dispatchTimeTravelState = useTimeTravelStateDispatchContext();
+  const [dispatchTimeTravelState] = [
+    useTimeTravelContext(),
+    useTimeTravelStateDispatchContext(),
+  ];
   const dispatchNextMove = useDispatchNextMove();
   const history = useHistoriesContext();
+  const dispatchSquares = useGameSquaresDispatchContext();
+  const [timeTakenButtonShown, settimeTakenButtonShown] = useState(null);
   // define timeTravelHandler function
   const timeTravelHandler = (moveCount) => {
     if (moveCount < 0) {
-      dispatchSquares(new Array(9).fill(null));
-      dispatchNextMove(0);
+      dispatchSquares({ type: "reset" });
+      dispatchNextMove({ type: "reset" });
     } else {
-      dispatchSquares(history[moveCount].square);
-      dispatchNextMove(history[moveCount].nextMove);
+      dispatchSquares({
+        type: "timeTravel",
+        historySqures: history[moveCount].squares,
+      });
+      dispatchNextMove({
+        type: "next",
+        currentMove: history[moveCount].nextMove,
+      });
     }
     dispatchTimeTravelState(moveCount);
   };
 
+  const timeTakenBtnShownHandler = function (index) {
+    settimeTakenButtonShown(index);
+  };
   const goToGameStartHandler = () => {
     timeTravelHandler(-1);
   };
@@ -32,8 +51,9 @@ function History() {
           <GoToMove
             key={ind}
             moveCount={ind}
+            timeTakenButtonShown={timeTakenButtonShown}
+            timeTakenBtnShownHandler={timeTakenBtnShownHandler}
             timeTravelHandler={timeTravelHandler}
-            history={history}
           />
         );
       })}

@@ -1,17 +1,18 @@
-import { useState } from "react";
-
-function GoToMove({ moveCount, timeTravelHandler }) {
-  const [timeTakenBtnShown, setTimeTakenBtnShown] = useState(false);
-
+function GoToMove({
+  moveCount,
+  timeTravelHandler,
+  timeTakenButtonShown,
+  timeTakenBtnShownHandler,
+}) {
   const goToMoveHandler = () => {
     timeTravelHandler(moveCount);
-    setTimeTakenBtnShown(!timeTakenBtnShown);
+    timeTakenBtnShownHandler(moveCount);
   };
   const buttonText = `Go to move #${moveCount + 1}`;
   return (
     <div className="goToMove">
       <button onClick={goToMoveHandler}>{buttonText}</button>
-      {timeTakenBtnShown && <button>Time taken</button>}
+      {timeTakenButtonShown === moveCount && <button>Time taken</button>}
     </div>
   );
 }
