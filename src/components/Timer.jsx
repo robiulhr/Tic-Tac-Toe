@@ -1,21 +1,15 @@
 import { useEffect } from "react";
-import {
-  useTimerContext,
-  useTimerDispatchContext,
-} from "../context/GameContexts/TimerContext";
+import { getTimer, setTimer, startTimer, stopTimer, useTimerDispatch } from "../context/GameContexts/TimerContext";
 
 function Timer() {
-  const [timer, dispatchTimer] = [useTimerContext(), useTimerDispatchContext()];
+  const [timer, dispatchTimer] = [getTimer(), useTimerDispatch()];
   const { timerValue, timerStatus, timerEnabled } = timer;
   useEffect(() => {
     let intervalId;
     if (timerValue !== null && timerStatus === "running") {
       intervalId = setInterval(() => {
         const newTimerValue = timerValue + 1;
-        dispatchTimer({
-          type: "setValue",
-          timerValue: newTimerValue,
-        });
+        setTimer(dispatchTimer, newTimerValue);
       }, 1000);
     }
     return () => {
@@ -28,9 +22,7 @@ function Timer() {
       {timerStatus === "stoped" && (
         <button
           onClick={() => {
-            dispatchTimer({
-              type: "start",
-            });
+            startTimer(dispatchTimer);
           }}
         >
           Start Timer
@@ -41,7 +33,7 @@ function Timer() {
         <>
           <button
             onClick={() => {
-              dispatchTimer({ type: "stop" });
+              stopTimer(dispatchTimer);
             }}
           >
             Stop Timer

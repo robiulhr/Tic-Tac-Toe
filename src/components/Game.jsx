@@ -1,12 +1,12 @@
 import Board from "./Board";
 import History from "./History";
 import PlayAgain from "./PlayAgain";
-import { useWinnerContext } from "../context/GameContexts/WinnerContext";
-import { useHistoriesContext } from "../context/GameContexts/HistoryContext";
+import { getWinner } from "../context/GameContexts/WinnerContext";
+import { getHistories } from "../context/GameContexts/HistoryContext";
 
 function Game() {
-  const winner = useWinnerContext();
-  const histories = useHistoriesContext();
+  const winner = getWinner();
+  const histories = getHistories();
   return (
     <div className="game_wrapper">
       <div className="title">

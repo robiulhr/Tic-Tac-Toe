@@ -1,74 +1,39 @@
 import { useEffect } from "react";
-import {
-  useMoveContext,
-  useDispatchNextMove,
-} from "../context/GameContexts/PlayerMoveContext";
-import {
-  useGameSquaresContext,
-  useGameSquaresDispatchContext,
-  getUpdatedSquares,
-} from "../context/GameContexts/GameSquareContext";
-import {
-  useTimeTravelContext,
-  useTimeTravelStateDispatchContext,
-} from "../context/GameContexts/TimeTravelContext";
-import {
-  useHistoriesContext,
-  useHistoriesDispatchContext,
-} from "../context/GameContexts/HistoryContext";
-import {
-  useWinnerContext,
-  useWinnerDispatchContext,
-} from "../context/GameContexts/WinnerContext";
+import { getNextMove, setNextMove, useNextMoveDispatch } from "../context/GameContexts/PlayerMoveContext";
+import { useSquareDispatch, getSquares, setSquares } from "../context/GameContexts/GameSquareContext";
+import { getTimeTravelState, setTimeTravelState, useTimeTravelStateDispatch } from "../context/GameContexts/TimeTravelContext";
+import { addHistories, getHistories, useHistoriesDispatch } from "../context/GameContexts/HistoryContext";
+import { getWinner, setWinner, useWinnerDispatch } from "../context/GameContexts/WinnerContext";
 import checkWinner from "../Utils/Utils";
 
 function Square({ squareIndex }) {
-  const [nextMove, dispatchNextMove] = [
-    useMoveContext(),
-    useDispatchNextMove(),
-  ];
-  const [squares, dispatchSquares] = [
-    useGameSquaresContext(),
-    useGameSquaresDispatchContext(),
-  ];
-  const [histories, dispatchHistories] = [
-    useHistoriesContext(),
-    useHistoriesDispatchContext()
-  ];
-  const [timeTravelState, dispatchtimeTravelState] = [
-    useTimeTravelContext(),
-    useTimeTravelStateDispatchContext(),
-  ];
-  const [winner, dispatchWinner] = [
-    useWinnerContext(),
-    useWinnerDispatchContext(),
-  ];
+  const [squares, dispatchSquares] = [getSquares(), useSquareDispatch()];
+  const [nextMove, dispatchNextMove] = [getNextMove(), useNextMoveDispatch()];
+  const [histories, dispatchHistories] = [getHistories(), useHistoriesDispatch()];
+  const [timeTravelState, timeTravelStateDispatch] = [getTimeTravelState(), useTimeTravelStateDispatch()];
+  const [winner, dispatchWinner] = [getWinner(), useWinnerDispatch()];
 
   const makeMove = function (squareIndex) {
     if (!squares[squareIndex] && !winner) {
       // set next move
-      dispatchNextMove({ type: "next", currentMove: nextMove });
-      // dispatch square
-      dispatchSquares({ type: "set", nextMove, squareIndex });
-      const newSquares = getUpdatedSquares(squares, {
-        type: "set",
-        nextMove,
-        squareIndex,
-      });
+      setNextMove(dispatchNextMove, nextMove);
+      // set squares
+      const upDatedSquares = setSquares(dispatchSquares, nextMove, squareIndex, squares);
       // reset timetravel state
-      dispatchtimeTravelState(null);
+      setTimeTravelState(timeTravelStateDispatch, null);
       // set the history
       const newHistoryObj = {
-        squares: newSquares,
+        squares: upDatedSquares,
         nextMove,
       };
-      dispatchHistories({ type: "add", newHistoryObj, timeTravelState });
+      addHistories(dispatchHistories, newHistoryObj, timeTravelState);
     }
   };
   useEffect(() => {
     // check if any winner found
     const gotWinner = checkWinner(squares);
-    if (gotWinner) dispatchWinner(!nextMove == 0 ? "O" : "X");
+    const foundedWinner = !nextMove == 0 ? "O" : "X"
+    if (gotWinner) setWinner(dispatchWinner, foundedWinner);
     else {
       // no winner found
       let isLastMove = true;
@@ -80,7 +45,7 @@ function Square({ squareIndex }) {
         }
       }
       // check if the move is the last move but no winner found that means the result is draw
-      isLastMove && dispatchWinner("Draw");
+      isLastMove && setWinner(dispatchWinner,"Draw");
     }
   });
 

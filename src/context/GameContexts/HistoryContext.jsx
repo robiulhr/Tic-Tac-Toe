@@ -9,36 +9,60 @@ const historyReducer = (histories, action) => {
   const { type, newHistoryObj, timeTravelState } = action;
   switch (type) {
     case "add":
-      return timeTravelState !== null && typeof timeTravelState == "number"
-          ? [...histories.slice(0, timeTravelState + 1), newHistoryObj]
-          : [...histories, newHistoryObj];
+      return timeTravelState !== null && typeof timeTravelState == "number" ? [...histories.slice(0, timeTravelState + 1), newHistoryObj] : [...histories, newHistoryObj];
     case "erase":
       return [];
     default:
       throw Error("Unknown action: " + action.type);
   }
 };
-// access the updated history
-export const getUpdatedHistories = historyReducer;
 
-export default function HistoryProvider({ children }) {
-  const [histories, dispatchHistories] = useReducer(
-    historyReducer,
-    initialHistory
-  );
+function HistoryProvider({ children }) {
+  const [histories, dispatchHistories] = useReducer(historyReducer, initialHistory);
   return (
     <HistoriesContext.Provider value={histories}>
-      <HistoriesDispatchContext.Provider value={dispatchHistories}>
-        {children}
-      </HistoriesDispatchContext.Provider>
+      <HistoriesDispatchContext.Provider value={dispatchHistories}>{children}</HistoriesDispatchContext.Provider>
     </HistoriesContext.Provider>
   );
 }
 
-export function useHistoriesContext() {
-  return useContext(HistoriesContext);
+function useHistoriesDispatch() {
+  const dispatchHistories = useContext(HistoriesDispatchContext);
+  if (dispatchHistories === undefined) {
+    throw new Error("useHistoriesDispatch must be used within a context Provider");
+  }
+  return dispatchHistories;
 }
 
-export function useHistoriesDispatchContext() {
-  return useContext(HistoriesDispatchContext);
-}
+const getHistories = function () {
+  return useContext(HistoriesContext);
+};
+
+const addHistories = function (dispatch, newHistoryObj, timeTravelState, oldHistories) {
+  if (typeof dispatch !== "function") throw new Error("addHistories function expect a dispatch function as the first argument.");
+  dispatch({ type: "add", newHistoryObj, timeTravelState });
+  let upDatedHistories = "Old History not provided";
+  if (oldHistories) {
+    upDatedHistories = historyReducer(oldHistories, {
+      type: "add",
+      newHistoryObj,
+      timeTravelState,
+    });
+  }
+  return upDatedHistories;
+};
+
+const eraseHistories = function (dispatch, oldHistories) {
+  if (typeof dispatch !== "function") throw new Error("eraseHistories function expect a dispatch function as the first argument.");
+  dispatch({ type: "erase" });
+  let upDatedHistories = "Old History not provided";
+  if (oldHistories) {
+    upDatedHistories = historyReducer(oldHistories, {
+      type: "erase",
+    });
+  }
+  return upDatedHistories;
+};
+
+export default HistoryProvider;
+export { useHistoriesDispatch, getHistories, addHistories, eraseHistories };

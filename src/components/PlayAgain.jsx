@@ -1,21 +1,21 @@
-import { useDispatchNextMove } from "../context/GameContexts/PlayerMoveContext";
-import { useGameSquaresDispatchContext } from "../context/GameContexts/GameSquareContext";
-import { useHistoriesDispatchContext } from "../context/GameContexts/HistoryContext";
-import { useTimeTravelStateDispatchContext } from "../context/GameContexts/TimeTravelContext";
-import { useWinnerDispatchContext } from "../context/GameContexts/WinnerContext";
+import { resetNextMove, useNextMoveDispatch } from "../context/GameContexts/PlayerMoveContext";
+import { resetSquares,useSquareDispatch } from "../context/GameContexts/GameSquareContext";
+import { eraseHistories, useHistoriesDispatch } from "../context/GameContexts/HistoryContext";
+import { setTimeTravelState, useTimeTravelStateDispatch } from "../context/GameContexts/TimeTravelContext";
+import { resetWinner, useWinnerDispatch } from "../context/GameContexts/WinnerContext";
 
 function PlayAgain() {
-  const dispatchNextMove = useDispatchNextMove();
-  const dispatchSquares = useGameSquaresDispatchContext();
-  const dispatchHistories = useHistoriesDispatchContext();
-  const dispatchTimeTravelState = useTimeTravelStateDispatchContext();
-  const dispatchWinner = useWinnerDispatchContext();
+  const dispatchNextMove = useNextMoveDispatch();
+  const dispatchHistories = useHistoriesDispatch();
+  const dispatchSquares = useSquareDispatch()
+  const dispatchTimeTravelState = useTimeTravelStateDispatch();
+  const dispatchWinner = useWinnerDispatch();
   const playAgainHandler = function () {
-    dispatchNextMove(0);
-    dispatchSquares({ type: "reset" });
-    dispatchHistories({type:"erase"});
-    dispatchTimeTravelState(null);
-    dispatchWinner();
+    resetNextMove(dispatchNextMove);
+    resetSquares(dispatchSquares);
+    eraseHistories(dispatchHistories);
+    setTimeTravelState(dispatchTimeTravelState,null);
+    resetWinner(dispatchWinner);
   };
   return (
     <div>

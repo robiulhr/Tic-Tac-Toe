@@ -1,37 +1,26 @@
 import GoToMove from "./GoToMove";
-import {
-  useTimeTravelContext,
-  useTimeTravelStateDispatchContext,
-} from "../context/GameContexts/TimeTravelContext";
-import { useDispatchNextMove } from "../context/GameContexts/PlayerMoveContext";
-import { useHistoriesContext } from "../context/GameContexts/HistoryContext";
-import { useGameSquaresDispatchContext } from "../context/GameContexts/GameSquareContext";
+import { setTimeTravelState, useTimeTravelStateDispatch } from "../context/GameContexts/TimeTravelContext";
+import { resetNextMove, setNextMove, useNextMoveDispatch } from "../context/GameContexts/PlayerMoveContext";
+import { getHistories } from "../context/GameContexts/HistoryContext";
+import { useSquareDispatch, resetSquares, setSquaresForTimetravel } from "../context/GameContexts/GameSquareContext";
 import { useState } from "react";
+
 function History() {
-  const [dispatchTimeTravelState] = [
-    useTimeTravelContext(),
-    useTimeTravelStateDispatchContext(),
-  ];
-  const dispatchNextMove = useDispatchNextMove();
-  const history = useHistoriesContext();
-  const dispatchSquares = useGameSquaresDispatchContext();
+  const dispatchSquares = useSquareDispatch();
+  const dispatchTimeTravelState = useTimeTravelStateDispatch();
+  const dispatchNextMove = useNextMoveDispatch();
+  const history = getHistories();
   const [timeTakenButtonShown, settimeTakenButtonShown] = useState(null);
   // define timeTravelHandler function
   const timeTravelHandler = (moveCount) => {
     if (moveCount < 0) {
-      dispatchSquares({ type: "reset" });
-      dispatchNextMove({ type: "reset" });
+      resetSquares(dispatchSquares);
+      resetNextMove(dispatchNextMove);
     } else {
-      dispatchSquares({
-        type: "timeTravel",
-        historySqures: history[moveCount].squares,
-      });
-      dispatchNextMove({
-        type: "next",
-        currentMove: history[moveCount].nextMove,
-      });
+      setSquaresForTimetravel(dispatchSquares, history[moveCount].squares);
+      setNextMove(dispatchNextMove, history[moveCount].nextMove);
     }
-    dispatchTimeTravelState(moveCount);
+    setTimeTravelState(dispatchTimeTravelState,moveCount)
   };
 
   const timeTakenBtnShownHandler = function (index) {

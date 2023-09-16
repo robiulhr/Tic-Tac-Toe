@@ -1,13 +1,13 @@
 import Square from "./Square";
 import Timer from "./Timer";
-import { useWinnerContext } from "../context/GameContexts/WinnerContext";
-import { useMoveContext } from "../context/GameContexts/PlayerMoveContext";
-import { useTimerContext } from "../context/GameContexts/TimerContext";
+import { getWinner} from "../context/GameContexts/WinnerContext";
+import { getNextMove } from "../context/GameContexts/PlayerMoveContext";
+import { getTimer } from "../context/GameContexts/TimerContext";
 
 function Board() {
-  const winner = useWinnerContext()
-  const nextMove = useMoveContext()
-  const timer = useTimerContext()
+  const winner = getWinner()
+  const nextMove = getNextMove()
+  const timer = getTimer()
   const winnerTitle = winner && winner !== "Draw" && `Winner : ${winner}`;
   const drawTitle = winner === "Draw" && `Result: Draw`;
   const nextMoveTitle = `Next Player Move: ${nextMove ? "X" : "O"}`;

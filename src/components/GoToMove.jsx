@@ -1,9 +1,4 @@
-function GoToMove({
-  moveCount,
-  timeTravelHandler,
-  timeTakenButtonShown,
-  timeTakenBtnShownHandler,
-}) {
+function GoToMove({ moveCount, timeTravelHandler, timeTakenButtonShown, timeTakenBtnShownHandler }) {
   const goToMoveHandler = () => {
     timeTravelHandler(moveCount);
     timeTakenBtnShownHandler(moveCount);
