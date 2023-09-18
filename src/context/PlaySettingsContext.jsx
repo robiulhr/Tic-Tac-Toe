@@ -8,12 +8,16 @@ const initialPlayingSettings = {
   playingLevel: "beginner",
   playingType: "dual",
 };
-const playingSettingsReducer = (squares, action) => {
+const playingSettingsReducer = (playingSettings, action) => {
   if (!action) throw Error("Please, provide the reducer action");
-  const { type } = action;
+  const { type, tileCount, playingLevel, playingType } = action;
   switch (type) {
-    case "":
-
+    case "setTileCount":
+      return { ...playingSettings, tileCount: tileCount };
+    case "setPlayingLevel":
+      return { ...playingSettings, playingLevel: playingLevel };
+    case "setPlayingType":
+      return { ...playingSettings, playingType: playingType };
     default:
       throw Error("Unknown action: " + type);
   }
@@ -28,4 +32,56 @@ function PlayingSettingsProvider({ children }) {
   );
 }
 
+const getPlayingSettings = () => {
+  return useContext(PlayingSettingsContext);
+};
+
+function usePlayingSettingsDispatch() {
+  const dispatchPlayingSettings = useContext(PlayingSettingsDispatchContext);
+  if (dispatchPlayingSettings === undefined) {
+    throw new Error("usePlayingSettingsDispatch must be used within a context Provider");
+  }
+  return dispatchPlayingSettings;
+}
+
+const setTileCount = (dispatch, tileCount, oldPlayingSettings) => {
+  if (typeof dispatch !== "function") throw new Error("setTileCount function expect a dispatch function as the first argument.");
+  dispatch({ type: "setTileCount", tileCount });
+  let upDatedPlayingSettings = "old PlayingSettings not provided";
+  if (oldPlayingSettings) {
+    upDatedPlayingSettings = squaresReducer(oldPlayingSettings, {
+      type: "setTileCount",
+      tileCount,
+    });
+  }
+  return upDatedPlayingSettings;
+};
+
+const setPlayingType = (dispatch, playingType, oldPlayingSettings) => {
+  if (typeof dispatch !== "function") throw new Error("setPlayingType function expect a dispatch function as the first argument.");
+  dispatch({ type: "setPlayingType", playingType });
+  let upDatedPlayingSettings = "old PlayingSettings not provided";
+  if (oldPlayingSettings) {
+    upDatedPlayingSettings = squaresReducer(oldPlayingSettings, {
+      type: "setPlayingType",
+      playingType,
+    });
+  }
+  return upDatedPlayingSettings;
+};
+
+const setPlayingLevel = (dispatch, playingLevel, oldPlayingSettings) => {
+  if (typeof dispatch !== "function") throw new Error("setPlayingLevel function expect a dispatch function as the first argument.");
+  dispatch({ type: "setPlayingLevel", playingLevel });
+  let upDatedPlayingSettings = "old PlayingSettings not provided";
+  if (oldPlayingSettings) {
+    upDatedPlayingSettings = squaresReducer(oldPlayingSettings, {
+      type: "setPlayingLevel",
+      playingLevel,
+    });
+  }
+  return upDatedPlayingSettings;
+};
+
 export default PlayingSettingsProvider;
+export { getPlayingSettings,usePlayingSettingsDispatch, setTileCount, setPlayingType, setPlayingLevel };

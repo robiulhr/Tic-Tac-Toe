@@ -4,7 +4,7 @@ const TimeTravelContext = createContext(null);
 const TimeTravelStateDispatchContext = createContext(null);
 
 function timeTravelStateReducer(timeTravelState, action) {
-  if (action.type === "set") return action.oldTimeTravelState;
+  if (action.type === "set") return action.timeTravelState;
 }
 
 function TimeTravelProvider({ children }) {

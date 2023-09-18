@@ -4,12 +4,14 @@ import { resetNextMove, setNextMove, useNextMoveDispatch } from "../context/Game
 import { getHistories } from "../context/GameContexts/HistoryContext";
 import { useSquareDispatch, resetSquares, setSquaresForTimetravel } from "../context/GameContexts/GameSquareContext";
 import { useState } from "react";
+import { getTimer } from "../context/GameContexts/TimerContext";
 
 function History() {
   const dispatchSquares = useSquareDispatch();
   const dispatchTimeTravelState = useTimeTravelStateDispatch();
   const dispatchNextMove = useNextMoveDispatch();
   const history = getHistories();
+  const timer = getTimer();
   const [timeTakenButtonShown, settimeTakenButtonShown] = useState(null);
   // define timeTravelHandler function
   const timeTravelHandler = (moveCount) => {
@@ -20,11 +22,13 @@ function History() {
       setSquaresForTimetravel(dispatchSquares, history[moveCount].squares);
       setNextMove(dispatchNextMove, history[moveCount].nextMove);
     }
-    setTimeTravelState(dispatchTimeTravelState,moveCount)
+    setTimeTravelState(dispatchTimeTravelState, moveCount);
   };
 
   const timeTakenBtnShownHandler = function (index) {
-    settimeTakenButtonShown(index);
+    if (timer.timerEnabled) {
+      settimeTakenButtonShown(index);
+    }
   };
   const goToGameStartHandler = () => {
     timeTravelHandler(-1);

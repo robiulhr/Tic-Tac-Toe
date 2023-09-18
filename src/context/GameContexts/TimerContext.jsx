@@ -5,12 +5,15 @@ const TimerDispatchContext = createContext(null);
 
 const initialTimer = {
   timerEnabled: true,
+  timerId: null,
   timerStatus: "stoped",
   timerValue: 0,
+  timerLength: "10",
 };
 const timerReducer = (timer, action) => {
   if (!action) throw Error("Please, provide the reducer action");
-  switch (action.type) {
+  const { type, timerValue, timerLength, timerId } = action;
+  switch (type) {
     case "start":
       return { ...timer, timerStatus: "running" };
     case "pause":
@@ -18,9 +21,13 @@ const timerReducer = (timer, action) => {
     case "stop":
       return { ...timer, timerValue: 0, timerStatus: "stoped" };
     case "set":
-      return { ...timer, timerValue: action.timerValue };
+      return { ...timer, timerValue: timerValue };
+    case "setTimerLength":
+      return { ...timer, timerLength: timerLength };
+    case "setTimerId":
+      return { ...timer, timerId: timerId };
     default:
-      throw Error("Unknown action: " + action.type);
+      throw Error("Unknown action: " + type);
   }
 };
 
@@ -94,5 +101,31 @@ const setTimer = function (dispatch, newValue, oldTimer) {
   return upDatedTimer;
 };
 
+const setTimerLength = function (dispatch, timerLength, oldTimer) {
+  if (typeof dispatch !== "function") throw new Error("setTimerLength function expect a dispatch function as the first argument.");
+  dispatch({ type: "setTimerLength", timerLength: timerLength });
+  let upDatedTimer = "Old Timer not provided";
+  if (oldTimer) {
+    upDatedTimer = timerReducer(oldTimer, {
+      type: "setTimerLength",
+      timerLength: timerLength,
+    });
+  }
+  return upDatedTimer;
+};
+
+const setTimerId = function(dispatch,timerId,oldTimer){
+  if (typeof dispatch !== "function") throw new Error("setTimerId function expect a dispatch function as the first argument.");
+  dispatch({ type: "setTimerId", timerId });
+  let upDatedTimer = "Old Timer not provided";
+  if (oldTimer) {
+    upDatedTimer = timerReducer(oldTimer, {
+      type: "setTimerId",
+      timerId
+    });
+  }
+  return upDatedTimer;
+}
+
 export default TimerProvider;
-export { useTimerDispatch, getTimer, startTimer, pauseTimer, stopTimer, setTimer };
+export { useTimerDispatch, getTimer, startTimer, pauseTimer, stopTimer, setTimer, setTimerLength, setTimerId};
