@@ -4,9 +4,9 @@ const PlayingSettingsContext = createContext(null);
 const PlayingSettingsDispatchContext = createContext(null);
 
 const initialPlayingSettings = {
-  tileCount: 3,
-  playingLevel: "beginner",
-  playingType: "dual",
+  tileCount: null,
+  playingLevel: null,
+  playingType: null,
 };
 const playingSettingsReducer = (playingSettings, action) => {
   if (!action) throw Error("Please, provide the reducer action");
@@ -49,7 +49,7 @@ const setTileCount = (dispatch, tileCount, oldPlayingSettings) => {
   dispatch({ type: "setTileCount", tileCount });
   let upDatedPlayingSettings = "old PlayingSettings not provided";
   if (oldPlayingSettings) {
-    upDatedPlayingSettings = squaresReducer(oldPlayingSettings, {
+    upDatedPlayingSettings = playingSettingsReducer(oldPlayingSettings, {
       type: "setTileCount",
       tileCount,
     });
@@ -62,7 +62,7 @@ const setPlayingType = (dispatch, playingType, oldPlayingSettings) => {
   dispatch({ type: "setPlayingType", playingType });
   let upDatedPlayingSettings = "old PlayingSettings not provided";
   if (oldPlayingSettings) {
-    upDatedPlayingSettings = squaresReducer(oldPlayingSettings, {
+    upDatedPlayingSettings = playingSettingsReducer(oldPlayingSettings, {
       type: "setPlayingType",
       playingType,
     });
@@ -75,7 +75,7 @@ const setPlayingLevel = (dispatch, playingLevel, oldPlayingSettings) => {
   dispatch({ type: "setPlayingLevel", playingLevel });
   let upDatedPlayingSettings = "old PlayingSettings not provided";
   if (oldPlayingSettings) {
-    upDatedPlayingSettings = squaresReducer(oldPlayingSettings, {
+    upDatedPlayingSettings = playingSettingsReducer(oldPlayingSettings, {
       type: "setPlayingLevel",
       playingLevel,
     });
@@ -84,4 +84,4 @@ const setPlayingLevel = (dispatch, playingLevel, oldPlayingSettings) => {
 };
 
 export default PlayingSettingsProvider;
-export { getPlayingSettings,usePlayingSettingsDispatch, setTileCount, setPlayingType, setPlayingLevel };
+export { getPlayingSettings, usePlayingSettingsDispatch, setTileCount, setPlayingType, setPlayingLevel };

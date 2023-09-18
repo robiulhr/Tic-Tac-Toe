@@ -89,5 +89,61 @@ body{
 
 .play_options button{
   margin: 10px;
-  min-width: 200px;
+  min-width: 260px;
+}
+
+
+
+/* =============== */
+.popup-content {
+  background-color: #282c34;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal {
+  font-size: 12px;
+  background: black;
+  box-shadow: 1px 2px #0000003b;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 700px;
+  padding: 40px;
+}
+.modal > .header {
+  width: 100%;
+  border-bottom: 1px solid gray;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+}
+.modal > .content {
+  width: 100%;
+  padding: 10px 5px;
+}
+.modal > .actions {
+  width: 100%;
+  padding: 10px 5px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.modal > .close {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: 30px;
+  top: 30px;
+  font-size: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
 }

@@ -7,7 +7,6 @@ import { getSquares } from "../context/GameContexts/GameSquareContext";
 function Timer({ makeMove }) {
   const [timer, dispatchTimer] = [getTimer(), useTimerDispatch()];
   const { timerValue, timerStatus, timerEnabled, timerLength } = timer;
-  const [nextMove, dispatchNextMove] = [getNextMove(), useNextMoveDispatch()];
   const squares = getSquares();
   useEffect(() => {
     let intervalId;
@@ -19,7 +18,6 @@ function Timer({ makeMove }) {
     } else if (timerValue >= timerLength) {
       setTimer(dispatchTimer, 0);
       const randomMove = giveRandomMove(squares);
-      console.log(randomMove)
       makeMove(randomMove);
     }
     return () => {
@@ -29,26 +27,11 @@ function Timer({ makeMove }) {
 
   return (
     <div>
-      {timerStatus === "stoped" && (
-        <button
-          onClick={() => {
-            startTimer(dispatchTimer);
-          }}
-        >
-          Start Timer
-        </button>
-      )}
-
       {timerStatus === "running" && (
         <>
-          <button
-            onClick={() => {
-              stopTimer(dispatchTimer);
-            }}
-          >
-            Stop Timer
-          </button>
+          <h4>Timer</h4>
           <div>{`${timerValue} second`}</div>
+          <hr style={{'margin-bottom':'20px'}} />
         </>
       )}
     </div>

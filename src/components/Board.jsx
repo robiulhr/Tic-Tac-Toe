@@ -39,7 +39,6 @@ function Board() {
         newHistoryObj.moveTimeTaken = timer.timerValue;
         setTimer(dispatchTimer, 0);
       }
-      console.log(timeTravelState,"timeTravelState")
       addHistories(dispatchHistories, newHistoryObj, timeTravelState, histories);
     } else if (timer.timerEnabled && timer.timerStatus !== "running") {
       console.log("please, start the timer.");
@@ -81,7 +80,8 @@ function Board() {
         {drawTitle && <h3>{drawTitle}</h3>}
         {nextMoveTitle && !winnerTitle && !drawTitle && <h3> {nextMoveTitle}</h3>}
       </div>
-      {timer.timerEnabled && <Timer  makeMove={makeMove}/>}
+      <hr style={{ "margin-bottom": "20px" }} />
+      {timer.timerEnabled && <Timer makeMove={makeMove} />}
       {squareRows.map((ele, ind) => {
         return (
           <div key={ind} className="row">
