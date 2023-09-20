@@ -1,72 +1,83 @@
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-  display:flex;
+body {
+  display: flex;
   align-items: center;
   justify-content: center;
-  height:100vh;
-  background-color:#282c34;
-  color:white;
+  min-height: 100vh;
+  height: auto;
+  background-color: #282c34;
+  color: white;
+  overflow-y: scroll;
 }
-.game_wrapper{
+
+.game_wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.game_title{
+
+.game_title {
   text-align: center;
 }
-.gameContents_upper{
+
+.gameContents_upper {
   display: flex;
   align-items: start;
   justify-content: center;
   gap: 20px;
 }
-.board{
-  padding:40px;
-}
-.row{
-  display:flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.square ,.square button{
-  width:60px;
-  height:60px;
-  border:1px solid white;
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  font-size:30px;
-  cursor:pointer;
-  margin:5px;
-  transition:all 0.3s ease-in-out;
-  margin: 20px;
-}
-
-.history{
+.board {
   padding: 40px;
 }
 
-.goToMove{
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.square,
+.square button {
+  width: 60px;
+  height: 60px;
+  border: 1px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  cursor: pointer;
+  margin: 5px;
+  transition: all 0.3s ease-in-out;
+  margin: 20px;
+}
+
+.history {
+  padding: 40px;
+}
+
+.goToMove {
   display: flex;
   margin: 10px;
   align-items: center;
   flex-direction: column;
   justify-content: center;
 }
-.goToMove button:not(:first-child){
+
+.goToMove button:not(:first-child) {
   margin: 3px;
   background: rgb(198, 240, 240);
   color: rgb(41, 41, 41);
 }
-.history button ,.goToMove button{
+
+.history button,
+.goToMove button {
   min-width: 200px;
 }
 
@@ -75,19 +86,20 @@ body{
 
 /* ======================== */
 
-.home_wrapper h1,.home_wrapper h3{
+.home_wrapper h1,
+.home_wrapper h3 {
   margin: 20px;
   text-align: center;
 }
 
-.play_options{
+.play_options {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
 
-.play_options button{
+.play_options button {
   margin: 10px;
   min-width: 260px;
 }
@@ -103,6 +115,7 @@ body{
   align-items: center;
   justify-content: center;
 }
+
 .modal {
   font-size: 12px;
   background: black;
@@ -115,18 +128,21 @@ body{
   max-width: 700px;
   padding: 40px;
 }
-.modal > .header {
+
+.modal>.header {
   width: 100%;
   border-bottom: 1px solid gray;
   font-size: 18px;
   text-align: center;
   padding: 5px;
 }
-.modal > .content {
+
+.modal>.content {
   width: 100%;
   padding: 10px 5px;
 }
-.modal > .actions {
+
+.modal>.actions {
   width: 100%;
   padding: 10px 5px;
   text-align: center;
@@ -134,7 +150,8 @@ body{
   align-items: center;
   justify-content: space-evenly;
 }
-.modal > .close {
+
+.modal>.close {
   cursor: pointer;
   position: absolute;
   display: block;

@@ -12,7 +12,7 @@ const initialTimer = {
 };
 const timerReducer = (timer, action) => {
   if (!action) throw Error("Please, provide the reducer action");
-  const { type, timerValue, timerLength, timerId } = action;
+  const { type, timerValue, timerLength, timerId, timerEnabled } = action;
   switch (type) {
     case "start":
       return { ...timer, timerStatus: "running" };
@@ -26,6 +26,8 @@ const timerReducer = (timer, action) => {
       return { ...timer, timerLength: timerLength };
     case "setTimerId":
       return { ...timer, timerId: timerId };
+    case "setTimerEnabled":
+      return { ...timer, timerEnabled: timerEnabled };
     default:
       throw Error("Unknown action: " + type);
   }
@@ -114,18 +116,31 @@ const setTimerLength = function (dispatch, timerLength, oldTimer) {
   return upDatedTimer;
 };
 
-const setTimerId = function(dispatch,timerId,oldTimer){
+const setTimerId = function (dispatch, timerId, oldTimer) {
   if (typeof dispatch !== "function") throw new Error("setTimerId function expect a dispatch function as the first argument.");
   dispatch({ type: "setTimerId", timerId });
   let upDatedTimer = "Old Timer not provided";
   if (oldTimer) {
     upDatedTimer = timerReducer(oldTimer, {
       type: "setTimerId",
-      timerId
+      timerId,
     });
   }
   return upDatedTimer;
-}
+};
+
+const setTimerEnabled = (dispatch, timerEnabled, oldTimer) => {
+  if (typeof dispatch !== "function") throw new Error("setTimerEnabled function expect a dispatch function as the first argument.");
+  dispatch({ type: "setTimerEnabled", timerEnabled });
+  let upDatedTimer = "Old Timer not provided";
+  if (oldTimer) {
+    upDatedTimer = timerReducer(oldTimer, {
+      type: "setTimerEnabled",
+      timerEnabled,
+    });
+  }
+  return upDatedTimer;
+};
 
 export default TimerProvider;
-export { useTimerDispatch, getTimer, startTimer, pauseTimer, stopTimer, setTimer, setTimerLength, setTimerId};
+export { useTimerDispatch, getTimer, startTimer, pauseTimer, stopTimer, setTimer, setTimerLength, setTimerId, setTimerEnabled };

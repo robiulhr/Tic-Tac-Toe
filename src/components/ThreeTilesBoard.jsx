@@ -2,15 +2,15 @@ import { useEffect } from "react";
 import Square from "./Square";
 import Timer from "./Timer";
 import { getNextMove, setNextMove, useNextMoveDispatch } from "../context/GameContexts/PlayerMoveContext";
-import { useSquareDispatch, getSquares, setSquares } from "../context/GameContexts/GameSquareContext";
 import { getTimeTravelState, setTimeTravelState, useTimeTravelStateDispatch } from "../context/GameContexts/TimeTravelContext";
 import { addHistories, getHistories, useHistoriesDispatch } from "../context/GameContexts/HistoryContext";
 import { getWinner, setWinner, useWinnerDispatch } from "../context/GameContexts/WinnerContext";
-import { checkWinner } from "../Utils/Utils";
+import { checkThreeTilesBoardWinner } from "../Utils/Utils";
 import { getTimer, setTimer, useTimerDispatch, stopTimer } from "../context/GameContexts/TimerContext";
+import { getThreeTilesSquares, useThreeTilesSquaresDispatch, setThreeTilesSquares } from "../context/GameContexts/ThreeTilesSquareContext";
 
-function Board() {
-  const [squares, dispatchSquares] = [getSquares(), useSquareDispatch()];
+function ThreeTilesBoard() {
+  const [threeTilesSquares, dispatchThreeTilesSquares] = [getThreeTilesSquares(), useThreeTilesSquaresDispatch()];
   const [nextMove, dispatchNextMove] = [getNextMove(), useNextMoveDispatch()];
   const [histories, dispatchHistories] = [getHistories(), useHistoriesDispatch()];
   const [timeTravelState, timeTravelStateDispatch] = [getTimeTravelState(), useTimeTravelStateDispatch()];
@@ -23,11 +23,11 @@ function Board() {
   let squareIndex = 0;
 
   const makeMove = function (squareIndex) {
-    if (!squares[squareIndex] && !winner && (timer.timerEnabled ? timer.timerStatus === "running" : timer.timerStatus !== "running")) {
+    if (!threeTilesSquares[squareIndex] && !winner && (timer.timerEnabled ? timer.timerStatus === "running" : timer.timerStatus !== "running")) {
       // set next move
       setNextMove(dispatchNextMove, nextMove);
       // set squares
-      const upDatedSquares = setSquares(dispatchSquares, nextMove, squareIndex, squares);
+      const upDatedSquares = setThreeTilesSquares(dispatchThreeTilesSquares, nextMove, squareIndex, threeTilesSquares);
       // reset timetravel state
       setTimeTravelState(timeTravelStateDispatch, null);
       // set the history
@@ -46,18 +46,19 @@ function Board() {
       console.log("Game has been finished. please start again to play.");
     }
   };
+
   useEffect(() => {
     // check if any winner found
-    const gotWinner = checkWinner(squares);
+    const gotWinner = checkThreeTilesBoardWinner(threeTilesSquares);
     const foundedWinner = !nextMove == 0 ? "O" : "X";
     if (gotWinner) {
       setWinner(dispatchWinner, foundedWinner);
     } else {
       // no winner found
       let isLastMove = true;
-      for (let i = 0; i < squares.length; i++) {
+      for (let i = 0; i < threeTilesSquares.length; i++) {
         // if this is not the last move
-        if (!squares[i]) {
+        if (!threeTilesSquares[i]) {
           isLastMove = false;
           break;
         }
@@ -80,7 +81,7 @@ function Board() {
         {drawTitle && <h3>{drawTitle}</h3>}
         {nextMoveTitle && !winnerTitle && !drawTitle && <h3> {nextMoveTitle}</h3>}
       </div>
-      <hr style={{ "margin-bottom": "20px" }} />
+      <hr style={{ marginBottom: "20px" }} />
       {timer.timerEnabled && <Timer makeMove={makeMove} />}
       {squareRows.map((ele, ind) => {
         return (
@@ -97,4 +98,4 @@ function Board() {
   );
 }
 
-export default Board;
+export default ThreeTilesBoard;

@@ -2,12 +2,18 @@ import GoToMove from "./GoToMove";
 import { setTimeTravelState, useTimeTravelStateDispatch } from "../context/GameContexts/TimeTravelContext";
 import { resetNextMove, setNextMove, useNextMoveDispatch } from "../context/GameContexts/PlayerMoveContext";
 import { getHistories } from "../context/GameContexts/HistoryContext";
-import { useSquareDispatch, resetSquares, setSquaresForTimetravel } from "../context/GameContexts/GameSquareContext";
+import { useThreeTilesSquaresDispatch, resetThreeTilesSquares, setThreeTilesSquaresForTimetravel } from "../context/GameContexts/ThreeTilesSquareContext";
+import { useFourTilesSquaresDispatch, resetFourTilesSquares, setFourTilesSquaresForTimetravel } from "../context/GameContexts/FourTilesSquareContext";
+import { useFiveTilesSquaresDispatch, resetFiveTilesSquares, setFiveTilesSquaresForTimetravel } from "../context/GameContexts/FiveTilesSquareContext";
 import { useState } from "react";
 import { getTimer } from "../context/GameContexts/TimerContext";
+import { getPlayingSettings } from "../context/PlaySettingsContext";
 
 function History() {
-  const dispatchSquares = useSquareDispatch();
+  const dispatchThreeTilesSquares = useThreeTilesSquaresDispatch();
+  const dispatchFourTilesSquares = useFourTilesSquaresDispatch();
+  const dispatchFiveTilesSquares = useFiveTilesSquaresDispatch();
+  const playingSettings = getPlayingSettings();
   const dispatchTimeTravelState = useTimeTravelStateDispatch();
   const dispatchNextMove = useNextMoveDispatch();
   const history = getHistories();
@@ -16,10 +22,14 @@ function History() {
   // define timeTravelHandler function
   const timeTravelHandler = (moveCount) => {
     if (moveCount < 0) {
-      resetSquares(dispatchSquares);
+      playingSettings.tileCount === 3 && resetThreeTilesSquares(dispatchThreeTilesSquares);
+      playingSettings.tileCount === 4 && resetFourTilesSquares(dispatchFourTilesSquares);
+      playingSettings.tileCount === 5 && resetFiveTilesSquares(dispatchFiveTilesSquares);
       resetNextMove(dispatchNextMove);
     } else {
-      setSquaresForTimetravel(dispatchSquares, history[moveCount].squares);
+      playingSettings.tileCount === 3 && setThreeTilesSquaresForTimetravel(dispatchThreeTilesSquares, history[moveCount].squares);
+      playingSettings.tileCount === 4 && setFourTilesSquaresForTimetravel(dispatchFourTilesSquares, history[moveCount].squares);
+      playingSettings.tileCount === 5 && setFiveTilesSquaresForTimetravel(dispatchFiveTilesSquares, history[moveCount].squares);
       setNextMove(dispatchNextMove, history[moveCount].nextMove);
     }
     setTimeTravelState(dispatchTimeTravelState, moveCount);

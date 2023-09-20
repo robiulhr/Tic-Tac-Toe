@@ -10,7 +10,7 @@ const initialPlayingSettings = {
 };
 const playingSettingsReducer = (playingSettings, action) => {
   if (!action) throw Error("Please, provide the reducer action");
-  const { type, tileCount, playingLevel, playingType } = action;
+  const { type, tileCount, playingLevel, playingType, resetExceptThese } = action;
   switch (type) {
     case "setTileCount":
       return { ...playingSettings, tileCount: tileCount };
@@ -18,6 +18,11 @@ const playingSettingsReducer = (playingSettings, action) => {
       return { ...playingSettings, playingLevel: playingLevel };
     case "setPlayingType":
       return { ...playingSettings, playingType: playingType };
+    case "reset":
+      if (resetExceptThese) {
+        return { ...initialPlayingSettings, ...resetExceptThese };
+      }
+      return { ...initialPlayingSettings };
     default:
       throw Error("Unknown action: " + type);
   }
@@ -83,5 +88,24 @@ const setPlayingLevel = (dispatch, playingLevel, oldPlayingSettings) => {
   return upDatedPlayingSettings;
 };
 
+const resetPlayingSettings = function (dispatch, resetExceptThese, oldPlayingSettings) {
+  if (typeof dispatch !== "function") throw new Error("resetPlayingSettings function expect a dispatch function as the first argument.");
+  let isResetExceptTheseAvailable = false;
+  if (typeof resetExceptThese === "object" && typeof oldPlayingSettings === "object") isResetExceptTheseAvailable = true;
+  let upDatedPlayingSettings = "old PlayingSettings not provided";
+  if (!isResetExceptTheseAvailable) {
+    oldPlayingSettings = resetExceptThese;
+    resetExceptThese = undefined;
+  }
+  dispatch({ type: "reset", resetExceptThese });
+  if (oldPlayingSettings) {
+    upDatedPlayingSettings = playingSettingsReducer(oldPlayingSettings, {
+      type: "reset",
+      resetExceptThese,
+    });
+  }
+  return upDatedPlayingSettings;
+};
+
 export default PlayingSettingsProvider;
-export { getPlayingSettings, usePlayingSettingsDispatch, setTileCount, setPlayingType, setPlayingLevel };
+export { getPlayingSettings, usePlayingSettingsDispatch, setTileCount, setPlayingType, setPlayingLevel, resetPlayingSettings };

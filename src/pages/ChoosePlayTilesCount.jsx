@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, redirect } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 import { getPlayingSettings, setTileCount, usePlayingSettingsDispatch } from "../context/PlaySettingsContext";
 
 const boardValueArr = ["", 0, "X"];
@@ -9,155 +9,165 @@ const fiveBoardArray = Array.from({ length: 5 }, () => Array.from({ length: 5 },
 
 function ChoosePlayTilesCount() {
   const playingSettings = getPlayingSettings();
-  console.log(playingSettings)
-  if (!playingSettings.playingType) console.log("playing type has not been selected")
-  else {
-    const dispatchPlayingSettings = usePlayingSettingsDispatch();
-    const [boardContainerHover, setBoardContainerHover] = useState(null);
-    const [boardContainerSelected, setBoardContainerSelected] = useState(null);
-    const [threeBoardItemHover, setthreeBoardItemHover] = useState(null);
-    const [fourBoardItemHover, setFourBoardItemHover] = useState(null);
-    const [fiveBoardItemHover, setFiveBoardItemHover] = useState(null);
-    let threeBoardIndex = 0;
-    let fourBoardIndex = 0;
-    let fiveBoardIndex = 0;
+  if (!playingSettings.playingType) return <Navigate to="/" replace={true} />;
+  const dispatchPlayingSettings = usePlayingSettingsDispatch();
+  const [boardContainerHover, setBoardContainerHover] = useState(null);
+  const [boardContainerSelected, setBoardContainerSelected] = useState(null);
+  const [threeBoardItemHover, setthreeBoardItemHover] = useState(null);
+  const [fourBoardItemHover, setFourBoardItemHover] = useState(null);
+  const [fiveBoardItemHover, setFiveBoardItemHover] = useState(null);
+  let threeBoardIndex = 0;
+  let fourBoardIndex = 0;
+  let fiveBoardIndex = 0;
 
-    return (
-      <div style={style.chooseTilesCount}>
-        <h2>Choose Tiles Count</h2>
-        <div style={style.allTilesContainer}>
-          <div
-            onMouseOver={() => {
-              setBoardContainerHover(0);
-            }}
-            onMouseLeave={() => {
-              setBoardContainerHover(null);
-            }}
-            onClick={() => {
-              setBoardContainerSelected(0);
-              setTileCount(dispatchPlayingSettings, 3);
-            }}
-            style={boardContainerHover === 0 || boardContainerSelected === 0 ? { ...style.boardContainer } : { ...boardContainerHovered }}
-          >
-            {threeBoardArray.map((ele, ind) => {
-              return (
-                <div key={`threeBoard${ind}row`} style={style.boardRow}>
-                  {ele.map((element, index) => {
-                    const boardItemIndex = threeBoardIndex;
-                    const threeBoardItem = (
-                      <div
-                        key={`threeBoard${threeBoardIndex}column`}
-                        onMouseOver={() => {
-                          setthreeBoardItemHover(boardItemIndex);
-                        }}
-                        onMouseLeave={() => {
-                          setthreeBoardItemHover(null);
-                        }}
-                        style={threeBoardItemHover !== threeBoardIndex ? { ...style.boardItem } : { ...boardItemHovered }}
-                      >
-                        {element}
-                      </div>
-                    );
-                    threeBoardIndex++;
-                    return threeBoardItem;
-                  })}
-                </div>
-              );
-            })}
-            <h4 style={style.boardTitle}>3 by 3 Tiles</h4>
-          </div>
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      // Your logic to reset or clear state here
+      alert("leaving the page.");
+    };
+    // Add the event listener to the window
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  });
 
-          <div
-            style={boardContainerHover === 1 || boardContainerSelected === 1 ? { ...style.boardContainer } : { ...boardContainerHovered }}
-            onMouseOver={() => {
-              setBoardContainerHover(1);
-            }}
-            onMouseLeave={() => {
-              setBoardContainerHover(null);
-            }}
-            onClick={() => {
-              setBoardContainerSelected(1);
-              setTileCount(dispatchPlayingSettings, 4);
-            }}
-          >
-            {fourBoardArray.map((ele, ind) => {
-              return (
-                <div key={`fourBoard${ind}row`} style={style.boardRow}>
-                  {ele.map((element, index) => {
-                    const boardItemIndex = fourBoardIndex;
-                    const fourBoardItem = (
-                      <div
-                        key={`fourBoard${fourBoardIndex}column`}
-                        onMouseOver={() => {
-                          setFourBoardItemHover(boardItemIndex);
-                        }}
-                        onMouseLeave={() => {
-                          setFourBoardItemHover(null);
-                        }}
-                        style={fourBoardItemHover !== fourBoardIndex ? { ...style.boardItem } : { ...boardItemHovered }}
-                      >
-                        {element}
-                      </div>
-                    );
-                    fourBoardIndex++;
-                    return fourBoardItem;
-                  })}
-                </div>
-              );
-            })}
-            <h4 style={style.boardTitle}>4 by 4 Tiles</h4>
-          </div>
-          <div
-            onMouseOver={() => {
-              setBoardContainerHover(2);
-            }}
-            onMouseLeave={() => {
-              setBoardContainerHover(null);
-            }}
-            onClick={() => {
-              setBoardContainerSelected(2);
-              setTileCount(dispatchPlayingSettings, 5);
-            }}
-            style={boardContainerHover === 2 || boardContainerSelected === 2 ? { ...style.boardContainer } : { ...boardContainerHovered }}
-          >
-            {fiveBoardArray.map((ele, ind) => {
-              return (
-                <div key={`fiveBoard${ind}row`} style={style.boardRow}>
-                  {ele.map((element, index) => {
-                    const boardItemIndex = fiveBoardIndex;
-                    const fiveBoardItem = (
-                      <div
-                        key={`fiveBoard${fiveBoardIndex}column`}
-                        onMouseOver={() => {
-                          setFiveBoardItemHover(boardItemIndex);
-                        }}
-                        onMouseLeave={() => {
-                          setFiveBoardItemHover(null);
-                        }}
-                        style={fiveBoardItemHover !== fiveBoardIndex ? { ...style.boardItem } : { ...boardItemHovered }}
-                      >
-                        {element}
-                      </div>
-                    );
-                    fiveBoardIndex++;
-                    return fiveBoardItem;
-                  })}
-                </div>
-              );
-            })}
-            <h4 style={style.boardTitle}>5 by 5 Tiles</h4>
-          </div>
+  return (
+    <div style={style.chooseTilesCount}>
+      <h2>Choose Tiles Count</h2>
+      <div style={style.allTilesContainer}>
+        <div
+          onMouseOver={() => {
+            setBoardContainerHover(0);
+          }}
+          onMouseLeave={() => {
+            setBoardContainerHover(null);
+          }}
+          onClick={() => {
+            setBoardContainerSelected(0);
+            setTileCount(dispatchPlayingSettings, 3);
+          }}
+          style={boardContainerHover === 0 || boardContainerSelected === 0 ? { ...style.boardContainer } : { ...boardContainerHovered }}
+        >
+          {threeBoardArray.map((ele, ind) => {
+            return (
+              <div key={`threeBoard${ind}row`} style={style.boardRow}>
+                {ele.map((element, index) => {
+                  const boardItemIndex = threeBoardIndex;
+                  const threeBoardItem = (
+                    <div
+                      key={`threeBoard${threeBoardIndex}column`}
+                      onMouseOver={() => {
+                        setthreeBoardItemHover(boardItemIndex);
+                      }}
+                      onMouseLeave={() => {
+                        setthreeBoardItemHover(null);
+                      }}
+                      style={threeBoardItemHover !== threeBoardIndex ? { ...style.boardItem } : { ...boardItemHovered }}
+                    >
+                      {element}
+                    </div>
+                  );
+                  threeBoardIndex++;
+                  return threeBoardItem;
+                })}
+              </div>
+            );
+          })}
+          <h4 style={style.boardTitle}>3 by 3 Tiles</h4>
         </div>
-        <div>
-          <Link to={"/singledevicemultiplayer"}>
-            <button type="submit" style={style.goBtn}>
-              Go
-            </button>
-          </Link>
+
+        <div
+          style={boardContainerHover === 1 || boardContainerSelected === 1 ? { ...style.boardContainer } : { ...boardContainerHovered }}
+          onMouseOver={() => {
+            setBoardContainerHover(1);
+          }}
+          onMouseLeave={() => {
+            setBoardContainerHover(null);
+          }}
+          onClick={() => {
+            setBoardContainerSelected(1);
+            setTileCount(dispatchPlayingSettings, 4);
+          }}
+        >
+          {fourBoardArray.map((ele, ind) => {
+            return (
+              <div key={`fourBoard${ind}row`} style={style.boardRow}>
+                {ele.map((element, index) => {
+                  const boardItemIndex = fourBoardIndex;
+                  const fourBoardItem = (
+                    <div
+                      key={`fourBoard${fourBoardIndex}column`}
+                      onMouseOver={() => {
+                        setFourBoardItemHover(boardItemIndex);
+                      }}
+                      onMouseLeave={() => {
+                        setFourBoardItemHover(null);
+                      }}
+                      style={fourBoardItemHover !== fourBoardIndex ? { ...style.boardItem } : { ...boardItemHovered }}
+                    >
+                      {element}
+                    </div>
+                  );
+                  fourBoardIndex++;
+                  return fourBoardItem;
+                })}
+              </div>
+            );
+          })}
+          <h4 style={style.boardTitle}>4 by 4 Tiles</h4>
+        </div>
+        <div
+          onMouseOver={() => {
+            setBoardContainerHover(2);
+          }}
+          onMouseLeave={() => {
+            setBoardContainerHover(null);
+          }}
+          onClick={() => {
+            setBoardContainerSelected(2);
+            setTileCount(dispatchPlayingSettings, 5);
+          }}
+          style={boardContainerHover === 2 || boardContainerSelected === 2 ? { ...style.boardContainer } : { ...boardContainerHovered }}
+        >
+          {fiveBoardArray.map((ele, ind) => {
+            return (
+              <div key={`fiveBoard${ind}row`} style={style.boardRow}>
+                {ele.map((element, index) => {
+                  const boardItemIndex = fiveBoardIndex;
+                  const fiveBoardItem = (
+                    <div
+                      key={`fiveBoard${fiveBoardIndex}column`}
+                      onMouseOver={() => {
+                        setFiveBoardItemHover(boardItemIndex);
+                      }}
+                      onMouseLeave={() => {
+                        setFiveBoardItemHover(null);
+                      }}
+                      style={fiveBoardItemHover !== fiveBoardIndex ? { ...style.boardItem } : { ...boardItemHovered }}
+                    >
+                      {element}
+                    </div>
+                  );
+                  fiveBoardIndex++;
+                  return fiveBoardItem;
+                })}
+              </div>
+            );
+          })}
+          <h4 style={style.boardTitle}>5 by 5 Tiles</h4>
         </div>
       </div>
-    );
-  }
+      <div>
+        <Link to={"/chooseplayinglevel"}>
+          <button type="submit" style={style.goBtn}>
+            Go
+          </button>
+        </Link>
+      </div>
+    </div>
+  );
 }
 
 const style = {
