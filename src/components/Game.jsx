@@ -7,7 +7,7 @@ import PlayAgain from "./PlayAgain";
 import Popup from "reactjs-popup";
 import { getWinner } from "../context/GameContexts/WinnerContext";
 import { getHistories } from "../context/GameContexts/HistoryContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getTimer, startTimer, setTimerEnabled, setTimerLength, useTimerDispatch } from "../context/GameContexts/TimerContext";
 import { getPlayingSettings } from "../context/PlaySettingsContext";
 function Game() {
@@ -17,6 +17,8 @@ function Game() {
   const timer = getTimer();
   const playingSettings = getPlayingSettings();
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   useEffect(() => {
     // handle timer settings according to the playing settings
