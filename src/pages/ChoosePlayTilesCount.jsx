@@ -16,22 +16,11 @@ function ChoosePlayTilesCount() {
   const [threeBoardItemHover, setthreeBoardItemHover] = useState(null);
   const [fourBoardItemHover, setFourBoardItemHover] = useState(null);
   const [fiveBoardItemHover, setFiveBoardItemHover] = useState(null);
+
   let threeBoardIndex = 0;
   let fourBoardIndex = 0;
   let fiveBoardIndex = 0;
 
-  useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      // Your logic to reset or clear state here
-      alert("leaving the page.");
-    };
-    // Add the event listener to the window
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  });
 
   return (
     <div style={style.chooseTilesCount}>
