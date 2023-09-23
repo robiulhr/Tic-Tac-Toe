@@ -21,6 +21,10 @@ body {
   align-items: center;
   justify-content: center;
 }
+.back_button{
+  width: 100%;
+  margin: 10px;
+}
 
 .game_title {
   text-align: center;

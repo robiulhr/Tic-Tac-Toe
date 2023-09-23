@@ -34,32 +34,47 @@ function Game() {
   }, []);
 
   useEffect(() => {
-    // Add a beforeunload event listener
     const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      console.log("Are you sure you want to leave this page?");
       // Prompt a confirmation message when the user tries to leave the route
-      // e.preventDefault();
       e.returnValue = "Are you sure you want to leave this page?";
     };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    // Add a beforeunload event listener
+    window.addEventListener("beforeunload", handleBeforeUnload, { capture: true });
 
-    // Clean up the event listener when the component unmounts
+    // let confirmValue;
+    // window.history.pushState(null, null, window.location.pathname);
+    // const popStateHandler = function (event) {
+    //   event.preventDefault();
+    //   // The popstate event is fired each time when the current history entry changes.
+    //   confirmValue = confirm("You pressed a Back button! Are you sure?!");
+    //   if (confirmValue === true) {
+    //     // Call Back button programmatically as per user confirmation.
+    //     window.history.back();
+    //     // Uncomment below line to redirect to the previous page instead.
+    //     // window.location = document.referrer // Note: IE11 is not supporting this.
+    //   } else {
+    //     // Stay on the current page.
+    //     window.history.pushState(null, null, window.location.pathname);
+    //   }
+    // };
+    // window.addEventListener("popstate", popStateHandler, false);
+
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      // show alert when user tries to
-      const confirm = window.confirm("do you want to leave?");
-      if (confirm) navigate("/");
-      else navigate(currentPath);
+      // setTimeout(() => {
+      //   window.removeEventListener("popstate", popStateHandler);
+      // }, 100);
     };
   }, []);
 
   return (
     <div className="game_wrapper">
+      <div className="back_button">
+        <button>Back</button>
+      </div>
       <div className="title">
         <h1 className="game_title">Tic Tac Toe Game </h1>
       </div>
