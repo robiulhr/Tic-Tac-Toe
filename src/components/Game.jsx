@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import ThreeTilesBoard from "./ThreeTilesBoard";
 import FourTilesBoard from "./FourTilesBoard";
 import FiveTilesBoard from "./FiveTilesBoard";
@@ -7,7 +7,8 @@ import PlayAgain from "./PlayAgain";
 import Popup from "reactjs-popup";
 import { getWinner } from "../context/GameContexts/WinnerContext";
 import { getHistories } from "../context/GameContexts/HistoryContext";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useBeforeUnload } from "react-router-dom";
+import { createBrowserHistory } from "history";
 import { getTimer, startTimer, setTimerEnabled, setTimerLength, useTimerDispatch } from "../context/GameContexts/TimerContext";
 import { getPlayingSettings } from "../context/PlaySettingsContext";
 function Game() {
@@ -16,10 +17,7 @@ function Game() {
   const dispatchTimer = useTimerDispatch();
   const timer = getTimer();
   const playingSettings = getPlayingSettings();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const currentPath = location.pathname;
-
+  
   useEffect(() => {
     // handle timer settings according to the playing settings
     if (playingSettings.playingType === "singleDeviceMultiPlayer" && playingSettings.playingLevel === "beginner") {
@@ -33,42 +31,110 @@ function Game() {
     }
   }, []);
 
+  // save it off before users navigate away
+  // useBeforeUnload(
+  //   useCallback((e) => {
+  //     e.preventDefault();
+  //     console.log("Are you sure you want to leave this page?");
+  //     // Prompt a confirmation message when the user tries to leave the route
+  //     e.returnValue = "Are you sure you want to leave this page?";
+  //   })
+  // );
+  console.log(useBeforeUnload);
+
+  // useEffect(() => {
+  //   console.log("hello world from beforeunload")
+  //   const beforeUnloadHandler = function(e) {
+  //     e.preventDefault();
+  //     console.log("Are you sure you want to leave this page?");
+  //     // Prompt a confirmation message when the user tries to leave the route
+  //     e.returnValue = "Are you sure you want to leave this page?";
+  //     alert("hello world")
+  //   };
+  //   window.addEventListener("beforeUnload", beforeUnloadHandler);
+
+  //   return () => {
+  //   console.log("hello world from beforeunload return")
+  //     // setTimeout(() => {
+  //     window.removeEventListener("beforeUnload", beforeUnloadHandler);
+  //     // }, 100);
+  //   };
+  // }, []);
+
   useEffect(() => {
     const handleBeforeUnload = (e) => {
-      e.preventDefault();
-      console.log("Are you sure you want to leave this page?");
-      // Prompt a confirmation message when the user tries to leave the route
-      e.returnValue = "Are you sure you want to leave this page?";
+      // Your condition to allow or prevent navigation
+      if (!allowNavigation) {
+        e.preventDefault();
+        e.returnValue = ""; // Required for some browsers
+      }
     };
 
-    // Add a beforeunload event listener
-    window.addEventListener("beforeunload", handleBeforeUnload, { capture: true });
-
-    // let confirmValue;
-    // window.history.pushState(null, null, window.location.pathname);
-    // const popStateHandler = function (event) {
-    //   event.preventDefault();
-    //   // The popstate event is fired each time when the current history entry changes.
-    //   confirmValue = confirm("You pressed a Back button! Are you sure?!");
-    //   if (confirmValue === true) {
-    //     // Call Back button programmatically as per user confirmation.
-    //     window.history.back();
-    //     // Uncomment below line to redirect to the previous page instead.
-    //     // window.location = document.referrer // Note: IE11 is not supporting this.
-    //   } else {
-    //     // Stay on the current page.
-    //     window.history.pushState(null, null, window.location.pathname);
-    //   }
-    // };
-    // window.addEventListener("popstate", popStateHandler, false);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [allowNavigation]);
+
+  useEffect(() => {
+    console.log(confirmValue);
+    window.history.pushState(null, null, window.location.pathname);
+    const popStateHandler = function (event) {
+      console.log("from insde the event listerner.");
+      event.preventDefault();
+      // The popstate event is fired each time when the current history entry changes.
+      const con = confirm("You pressed a Back button! Are you sure?!");
+      setconfirmValue(con);
+      if (confirmValue === true) {
+        // Call Back button programmatically as per user confirmation.
+        window.history.back();
+        // Uncomment below line to redirect to the previous page instead.
+        // window.location = document.referrer // Note: IE11 is not supporting this.
+      } else {
+        // Stay on the current page.
+        // window.history.pushState(null, null, window.location.pathname);
+      }
+    };
+    // window.addEventListener("popstate", popStateHandler, false);
+    // const popStateHandler = function (event) {
+    //   event.preventDefault();
+    //   // Check your condition here
+    //   // if (confirmValue) {
+    //     console.log("from inside the if condition.")
+    //     // Allow the back button to work as usual
+    //   // } else {
+    //     // Prevent the back button action and provide feedback
+    //     alert("You can't go back in this context.");
+    //     // history.pushState(null, null, window.location.href);
+    //   // }
+    // }
+    // window.addEventListener('popstate', popStateHandler);
+    return () => {
+      console.log("from inside the return");
       // setTimeout(() => {
-      //   window.removeEventListener("popstate", popStateHandler);
+      window.removeEventListener("popstate", popStateHandler);
       // }, 100);
     };
   }, []);
+
+  // useEffect(() => {
+  //   console.log(location.pathname);
+  // }, [location]);
+
+  // useEffect(() => {
+  // console.log(history)
+  // const unHistory = history.listen((location) => {
+  //   if (history.action === "PUSH") {
+  //     console.log("pushing to the history");
+  //   }
+  //   if (history.action === "POP") {
+  //     alert("poping to the history");
+  //     console.log("poping to the history");
+  //   }
+  // });
+  // return unHistory;
+  // }, []);
 
   return (
     <div className="game_wrapper">
