@@ -1,13 +1,8 @@
-import { getFiveTilesSquares } from "../context/GameContexts/FiveTilesSquareContext";
-import { getFourTilesSquares } from "../context/GameContexts/FourTilesSquareContext";
-import { getThreeTilesSquares } from "../context/GameContexts/ThreeTilesSquareContext";
-import { getPlayingSettings } from "../context/PlaySettingsContext";
+import { getBoardContext } from "../context/GameContext";
 
 function Square({ makeMove, squareIndex }) {
-  const playingSettings = getPlayingSettings();
-  const threeTilessquares = getThreeTilesSquares();
-  const fourTilessquares = getFourTilesSquares();
-  const fiveTilessquares = getFiveTilesSquares();
+  const {board} = getBoardContext();
+  const { squares } = board;
   return (
     <div className="square">
       <button
@@ -15,9 +10,7 @@ function Square({ makeMove, squareIndex }) {
           makeMove(squareIndex);
         }}
       >
-        {playingSettings.tileCount === 3 && threeTilessquares[squareIndex]}
-        {playingSettings.tileCount === 4 && fourTilessquares[squareIndex]}
-        {playingSettings.tileCount === 5 && fiveTilessquares[squareIndex]}
+        {squares[squareIndex]}
       </button>
     </div>
   );

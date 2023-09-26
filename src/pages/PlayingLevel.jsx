@@ -1,11 +1,11 @@
 import { Link, Navigate } from "react-router-dom";
-import { getPlayingSettings, setPlayingLevel, usePlayingSettingsDispatch } from "../context/PlaySettingsContext";
+import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
+import { setPlayingLevel } from "../actions/PlayingSettingsActions";
 
 function PlayingLevel() {
-  const playingSettings = getPlayingSettings();
+  const { playingSettings, dispatchPlayingSettings } = getPlayingSettingsContext();
   if (!playingSettings.playingType) return <Navigate to="/" replace={true} />;
   else if (!playingSettings.tileCount) return <Navigate to="/chooseplaytilescount" replace={true} />;
-  const dispatchPlayingSettings = usePlayingSettingsDispatch();
   return (
     <div>
       <h4 style={{ textAlign: "center", margin: "10px" }}>Choose Playing Level</h4>

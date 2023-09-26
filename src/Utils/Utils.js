@@ -1,5 +1,4 @@
-
-function checkThreeTilesBoardWinner(squares) {
+const checkThreeTilesBoardWinner = (squares) => {
   let winner;
   const list = [
     [0, 1, 2],
@@ -90,6 +89,23 @@ function checkFiveTilesBoardWinner(squares) {
   return winner;
 }
 
+
+function checkBoardWinner(squares) {
+  let winner
+  switch (squares.length) {
+    case 9:
+      winner = checkThreeTilesBoardWinner(squares)
+      break;
+    case 16:
+      winner = checkFourTilesBoardWinner(squares)
+      break;
+    case 25:
+      winner = checkFiveTilesBoardWinner(squares)
+      break;
+  }
+  return winner
+}
+
 const giveRandomMove = function (squares) {
   const length = (squares.length) - 1;
   let randomMove = Math.round(length * Math.random())
@@ -97,4 +113,4 @@ const giveRandomMove = function (squares) {
   return randomMove;
 }
 
-export { checkThreeTilesBoardWinner, checkFourTilesBoardWinner, checkFiveTilesBoardWinner, giveRandomMove }
+export { checkBoardWinner, giveRandomMove }

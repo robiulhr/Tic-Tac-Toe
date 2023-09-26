@@ -1,7 +1,7 @@
-import { getHistories } from "../context/GameContexts/HistoryContext";
+import { getHistoryContext } from "../context/GameContext";
 
 function GoToMove({ moveCount, timeTravelHandler, timeTakenButtonShown, timeTakenBtnShownHandler }) {
-  const histories = getHistories()
+  const { histories } = getHistoryContext();
   const goToMoveHandler = () => {
     timeTravelHandler(moveCount);
     timeTakenBtnShownHandler(moveCount);

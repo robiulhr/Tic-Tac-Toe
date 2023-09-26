@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { getPlayingSettings, setTileCount, usePlayingSettingsDispatch } from "../context/PlaySettingsContext";
+import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
+import { setTileCount } from "../actions/PlayingSettingsActions";
 
 const boardValueArr = ["", 0, "X"];
 const threeBoardArray = Array.from({ length: 3 }, () => Array.from({ length: 3 }, () => boardValueArr[Math.round(Math.random() * 2)]));
@@ -8,9 +9,8 @@ const fourBoardArray = Array.from({ length: 4 }, () => Array.from({ length: 4 },
 const fiveBoardArray = Array.from({ length: 5 }, () => Array.from({ length: 5 }, () => boardValueArr[Math.round(Math.random() * 2)]));
 
 function ChoosePlayTilesCount() {
-  const playingSettings = getPlayingSettings();
+  const {playingSettings, dispatchPlayingSettings} = getPlayingSettingsContext();
   if (!playingSettings.playingType) return <Navigate to="/" replace={true} />;
-  const dispatchPlayingSettings = usePlayingSettingsDispatch();
   const [boardContainerHover, setBoardContainerHover] = useState(null);
   const [boardContainerSelected, setBoardContainerSelected] = useState(null);
   const [threeBoardItemHover, setthreeBoardItemHover] = useState(null);
@@ -20,7 +20,6 @@ function ChoosePlayTilesCount() {
   let threeBoardIndex = 0;
   let fourBoardIndex = 0;
   let fiveBoardIndex = 0;
-
 
   return (
     <div style={style.chooseTilesCount}>

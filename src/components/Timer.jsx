@@ -1,18 +1,14 @@
 import { useEffect } from "react";
-import { getTimer, setTimer, useTimerDispatch } from "../context/GameContexts/TimerContext";
 import { giveRandomMove } from "../Utils/Utils";
-import { getThreeTilesSquares } from "../context/GameContexts/ThreeTilesSquareContext";
-import { getPlayingSettings } from "../context/PlaySettingsContext";
-import { getFourTilesSquares } from "../context/GameContexts/FourTilesSquareContext";
-import { getFiveTilesSquares } from "../context/GameContexts/FiveTilesSquareContext";
+import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
+import { getBoardContext, getTimerContext } from "../context/GameContext";
+import { setTimer } from "../actions/GameActions";
 
 function Timer({ makeMove }) {
-  const [timer, dispatchTimer] = [getTimer(), useTimerDispatch()];
+  const {timer, dispatchTimer} = getTimerContext();
   const { timerValue, timerStatus, timerLength } = timer;
-  const playingSettings = getPlayingSettings();
-  const threeTilessquares = getThreeTilesSquares();
-  const fourTilessquares = getFourTilesSquares();
-  const fiveTilessquares = getFiveTilesSquares();
+  const {board} = getBoardContext();
+  const { squares } = board;
   useEffect(() => {
     let intervalId;
     if (timerValue !== null && timerStatus === "running" && timerValue < timerLength) {
@@ -23,9 +19,7 @@ function Timer({ makeMove }) {
     } else if (timerValue >= timerLength) {
       setTimer(dispatchTimer, 0);
       let randomMove;
-      playingSettings.tileCount === 3 && (randomMove = giveRandomMove(threeTilessquares));
-      playingSettings.tileCount === 4 && (randomMove = giveRandomMove(fourTilessquares));
-      playingSettings.tileCount === 5 && (randomMove = giveRandomMove(fiveTilessquares));
+      giveRandomMove(squares);
       makeMove(randomMove);
     }
     return () => {

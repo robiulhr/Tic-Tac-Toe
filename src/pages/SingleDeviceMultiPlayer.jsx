@@ -1,40 +1,43 @@
 import Game from "../components/Game";
-import { getPlayingSettings } from "../context/PlaySettingsContext";
+import GameProvider from "../context/GameContext";
+import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
 import { Navigate } from "react-router-dom";
-import PlayerMoveProvider from "../context/GameContexts/PlayerMoveContext";
-import TimeTravelProvider from "../context/GameContexts/TimeTravelContext";
-import HistoryProvider from "../context/GameContexts/HistoryContext";
-import TimerProvider from "../context/GameContexts/TimerContext";
-import WinnerProvider from "../context/GameContexts/WinnerContext";
-import ThreeTilesSquaresProvider from "../context/GameContexts/ThreeTilesSquareContext";
-import FourTilesSquaresProvider from "../context/GameContexts/FourTilesSquareContext";
-import FiveTilesSquaresProvider from "../context/GameContexts/FiveTilesSquareContext";
+import { useEffect, useState } from "react";
 
 function SingleDeviceMultiPlayer() {
-  const playingSettings = getPlayingSettings();
-  if (!playingSettings.playingType) return <Navigate to="/" replace={true} />;
-  else if (!playingSettings.tileCount) return <Navigate to="/chooseplaytilescount" replace={true} />;
-  else if (!playingSettings.playingLevel) return <Navigate to="/chooseplayinglevel" replace={true} />;
+  const {playingSettings} = getPlayingSettingsContext();
+  // if (!playingSettings.playingType) return <Navigate to="/" replace={true} />;
+  // else if (!playingSettings.tileCount) return <Navigate to="/chooseplaytilescount" replace={true} />;
+  // else if (!playingSettings.playingLevel) return <Navigate to="/chooseplayinglevel" replace={true} />;
+  const [showAlert, setShowAlert] = useState(false);
+
+  // useEffect(() => {
+  //   console.log("showAlert value", showAlert);
+  //   const beforeunloadHandler = function (e) {
+  //     if (showAlert) {
+  //       console.log("hello world", showAlert);
+  //       e.preventDefault();
+  //       console.log(e);
+  //       e.returnValue = "";
+  //     }
+  //   };
+  //   window.addEventListener("beforeunload", beforeunloadHandler);
+  //   return () => {
+  //     console.log("hello world from return of beforeunload");
+  //     window.removeEventListener("beforeunload", beforeunloadHandler);
+  //   };
+  // }, [showAlert]);
+
+  // useEffect(() => {
+  //   setShowAlert(true);
+  // }, []);
+
   return (
-    <PlayerMoveProvider>
-      <TimeTravelProvider>
-        <HistoryProvider>
-          <TimerProvider>
-            <WinnerProvider>
-              <ThreeTilesSquaresProvider>
-                <FourTilesSquaresProvider>
-                  <FiveTilesSquaresProvider>
-                    <div>
-                      <Game />
-                    </div>
-                  </FiveTilesSquaresProvider>
-                </FourTilesSquaresProvider>
-              </ThreeTilesSquaresProvider>
-            </WinnerProvider>
-          </TimerProvider>
-        </HistoryProvider>
-      </TimeTravelProvider>
-    </PlayerMoveProvider>
+    <div>
+      <GameProvider>
+        <Game />
+      </GameProvider>
+    </div>
   );
 }
 
