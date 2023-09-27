@@ -7,7 +7,7 @@ import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
 import { addHistories, setNextMove, setSquares, setTimeTravelState, setTimer, setWinner, stopTimer } from "../actions/GameActions";
 import { Navigate } from "react-router-dom";
 
-function Board({ firstRender }) {
+function Board({ firstRender,showAlertHandler }) {
   const { playingSettings } = getPlayingSettingsContext();
   const { board, dispatchBoard } = getBoardContext();
   const { squares, nextMove } = board;
@@ -35,7 +35,9 @@ function Board({ firstRender }) {
   let squareIndex = 0;
 
   const makeMove = function (squareIndex) {
+    console.log(squareIndex, "squareIndex");
     if (!squares[squareIndex] && !winner && (timerEnabled ? timerStatus === "running" : timerStatus !== "running")) {
+      // showAlertHandler()
       // set next move
       setNextMove(dispatchBoard);
       // set squares

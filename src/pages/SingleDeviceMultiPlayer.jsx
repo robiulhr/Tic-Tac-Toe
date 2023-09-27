@@ -5,11 +5,11 @@ import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function SingleDeviceMultiPlayer() {
-  const {playingSettings} = getPlayingSettingsContext();
+  // const {playingSettings} = getPlayingSettingsContext();
   // if (!playingSettings.playingType) return <Navigate to="/" replace={true} />;
   // else if (!playingSettings.tileCount) return <Navigate to="/chooseplaytilescount" replace={true} />;
   // else if (!playingSettings.playingLevel) return <Navigate to="/chooseplayinglevel" replace={true} />;
-  const [showAlert, setShowAlert] = useState(false);
+  // const [showAlert, setShowAlert] = useState(false);
 
   // useEffect(() => {
   //   console.log("showAlert value", showAlert);
@@ -34,9 +34,9 @@ function SingleDeviceMultiPlayer() {
 
   return (
     <div>
-      <GameProvider>
-        <Game />
-      </GameProvider>
+      {/* <GameProvider> */}
+      <Game />
+      {/* </GameProvider> */}
     </div>
   );
 }

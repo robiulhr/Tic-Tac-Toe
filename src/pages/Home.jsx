@@ -2,18 +2,36 @@ import { Link } from "react-router-dom";
 import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
 import { useEffect, useState } from "react";
 import { resetPlayingSettings, setPlayingType } from "../actions/PlayingSettingsActions";
+import { createBrowserHistory } from "history";
 
 function Home() {
-  const {dispatchPlayingSettings} = getPlayingSettingsContext();
-  const [shouldUnload, setShouldUnload] = useState(false);
+  const { dispatchPlayingSettings } = getPlayingSettingsContext();
+  const [shouldUnload, setShouldUnload] = useState(true);
+  let BrowserHistory = createBrowserHistory();
 
   useEffect(() => {
     // reset all player settings
     resetPlayingSettings(dispatchPlayingSettings);
   }, []);
 
+  // useEffect(() => {
+  //   let unblock = BrowserHistory.block((tx) => {
+  //     // Navigation was blocked! Let's show a confirmation dialog
+  //     // so the user can decide if they actually want to navigate
+  //     // away and discard changes they've made in the current page.
+  //     let url = tx.location.pathname;
+  //     console.log(tx);
+  //     if (window.confirm(`Are you sure you want to go to ${url}?`)) {
+  //       // Unblock the navigation.
+  //       unblock();
+  //       // Retry the transition.
+  //       tx.retry();
+  //     }
+  //   });
+  //   return unblock;
+  // });
   useEffect(() => {
-    console.log("hello world", shouldUnload);
+    // console.log("hello world", shouldUnload);
     const beforeunloadHandler = function (e) {
       if (shouldUnload) {
         e.preventDefault();
@@ -25,6 +43,9 @@ function Home() {
     return () => {
       window.removeEventListener("beforeunload", beforeunloadHandler);
     };
+    // window.onbeforeunload = function() {
+    //   console.log('new funciton has been added.')
+    //   return "Are you sure?"}
   }, [shouldUnload]);
 
   return (

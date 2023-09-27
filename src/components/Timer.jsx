@@ -5,9 +5,9 @@ import { getBoardContext, getTimerContext } from "../context/GameContext";
 import { setTimer } from "../actions/GameActions";
 
 function Timer({ makeMove }) {
-  const {timer, dispatchTimer} = getTimerContext();
+  const { timer, dispatchTimer } = getTimerContext();
   const { timerValue, timerStatus, timerLength } = timer;
-  const {board} = getBoardContext();
+  const { board } = getBoardContext();
   const { squares } = board;
   useEffect(() => {
     let intervalId;
@@ -19,7 +19,7 @@ function Timer({ makeMove }) {
     } else if (timerValue >= timerLength) {
       setTimer(dispatchTimer, 0);
       let randomMove;
-      giveRandomMove(squares);
+      randomMove = giveRandomMove(squares);
       makeMove(randomMove);
     }
     return () => {

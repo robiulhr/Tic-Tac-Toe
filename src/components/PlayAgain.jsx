@@ -7,15 +7,16 @@ function PlayAgain() {
   const { dispatchHistory } = getHistoryContext();
   const { dispatchWinner } = getWinnerContext();
   const { timer, dispatchTimer } = getTimerContext();
-  const {playingSettings}= getPlayingSettingsContext()
-  const {tileCount} = playingSettings
+  const { playingSettings } = getPlayingSettingsContext();
+  const { tileCount } = playingSettings;
   const playAgainHandler = function () {
-    resetBoard(dispatchBoard,tileCount);
+    resetBoard(dispatchBoard, tileCount);
     eraseHistories(dispatchHistory);
     setTimeTravelState(dispatchHistory, null);
-    resetWinner(dispatchWinner,play);
+    resetWinner(dispatchWinner);
     if (timer.timerEnabled) startTimer(dispatchTimer);
   };
+ 
   return (
     <div>
       <button onClick={playAgainHandler}>Play again</button>
