@@ -10,7 +10,7 @@ const fiveBoardArray = Array.from({ length: 5 }, () => Array.from({ length: 5 },
 
 function ChoosePlayTilesCount() {
   const {playingSettings, dispatchPlayingSettings} = getPlayingSettingsContext();
-  if (!playingSettings.playingType) return <Navigate to="/" replace={true} />;
+  // if (!playingSettings.playingType) return <Navigate to="/" replace={true} />;
   const [boardContainerHover, setBoardContainerHover] = useState(null);
   const [boardContainerSelected, setBoardContainerSelected] = useState(null);
   const [threeBoardItemHover, setthreeBoardItemHover] = useState(null);
@@ -149,9 +149,7 @@ function ChoosePlayTilesCount() {
       </div>
       <div>
         <Link to={"/chooseplayinglevel"}>
-          <button type="submit" style={style.goBtn}>
-            Go
-          </button>
+          go
         </Link>
       </div>
     </div>

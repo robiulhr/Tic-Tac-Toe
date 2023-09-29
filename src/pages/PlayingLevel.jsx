@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 function PlayingLevel() {
   const navigate = useNavigate();
   const { playingSettings, dispatchPlayingSettings } = getPlayingSettingsContext();
-  if (!playingSettings.playingType) return <Navigate to="/" replace={true} />;
-  else if (!playingSettings.tileCount) return <Navigate to="/chooseplaytilescount" replace={true} />;
+  // if (!playingSettings.playingType) return <Navigate to="/" replace={true} />;
+  // else if (!playingSettings.tileCount) return <Navigate to="/chooseplaytilescount" replace={true} />;
 
   return (
     <div>
@@ -16,21 +16,15 @@ function PlayingLevel() {
         <button
           onClick={() => {
             setPlayingLevel(dispatchPlayingSettings, "beginner");
-            navigate(`/${playingSettings.playingType}`);
+            navigate(`/singleDeviceMultiPlayer`);
           }}
         >
           Beginner Level
         </button>
-        <Link to={`/${playingSettings.playingType}`}>
-          <button
-            onClick={() => {
-              setPlayingLevel(dispatchPlayingSettings, "medium");
-            }}
-          >
-            Medium Level
-          </button>
+        <Link to={`/singleDeviceMultiPlayer`}>
+          medium
         </Link>
-        <Link to={`/${playingSettings.playingType}`}>
+        <Link to={`/singleDeviceMultiPlayer`}>
           <button
             onClick={() => {
               setPlayingLevel(dispatchPlayingSettings, "expert");

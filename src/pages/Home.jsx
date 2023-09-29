@@ -53,14 +53,8 @@ function Home() {
       <h1>Tic Tac Toe Game</h1>
       <h3>How do you want to play?</h3>
       <div className="play_options">
-        <Link to={`chooseplaytilescount`}>
-          <button
-            onClick={() => {
-              setPlayingType(dispatchPlayingSettings, "singleDeviceMultiPlayer");
-            }}
-          >
-            Single Device Multi Player
-          </button>
+        <Link to='chooseplaytilescount'>
+          single
         </Link>
         <Link to={`chooseplaytilescount`}>
           <button

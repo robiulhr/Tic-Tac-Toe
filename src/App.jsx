@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: "/singledevicemultiplayer",
+    path: "/singleDeviceMultiplayer",
     element: <SingleDeviceMultiPlayer />,
   },
   {

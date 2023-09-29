@@ -1,23 +1,25 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext, useRef } from "react";
 import Board from "./Board";
 import History from "./History";
 import PlayAgain from "./PlayAgain";
 import Popup from "reactjs-popup";
-import { Link, useBeforeUnload } from "react-router-dom";
+import { Link, useBeforeUnload, useLocation, useNavigate, useNavigation } from "react-router-dom";
 import { resetBoard, setTimerEnabled, setTimerLength, startTimer } from "../actions/GameActions";
 import { getBoardContext, getHistoryContext, getTimerContext, getWinnerContext } from "../context/GameContext";
 import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
 import { createBrowserHistory } from "history";
+import { UNSAFE_NavigationContext } from "react-router-dom";
 function Game() {
   // Create your own history instance.
-  let BrowserHistory = createBrowserHistory();
+  // let BrowserHistory = createBrowserHistory();
+  // const navigate = useNavigate();
   // const { board, dispatchBoard } = getBoardContext();
   // const { timer, dispatchTimer } = getTimerContext();
   // const { winner, dispatchWinner } = getWinnerContext();
   // const { history, dispatchHistory } = getHistoryContext();
   // const { histories } = history;
   // const { playingSettings } = getPlayingSettingsContext();
-  const [showAlert, setShowAlert] = useState(false);
+  // const [showAlert, setShowAlert] = useState(false);
   // const [firstRender, setFirstRender] = useState(true);
   // useEffect(() => {
   //   const { playingType, playingLevel, tileCount } = playingSettings;
@@ -59,83 +61,95 @@ function Game() {
   //   }
   // }, [histories]);
 
+  const navigate = useNavigate();
+  let BrowserHistory = createBrowserHistory();
+  const [showAlert, setShowAlert] = useState(false);
+
   const showAlertHandler = function () {
     if (!showAlert) {
       setShowAlert(true);
     }
   };
-
+  function blocker() {
+    let unblock = BrowserHistory.block((tx) => {
+      // Navigation was blocked! Let's show a confirmation dialog
+      // so the user can decide if they actually want to navigate
+      // away and discard changes they've made in the current page.
+      let url = tx.location.pathname;
+      console.log(url);
+      const confirmValue = window.confirm(`Are you sure you want to go to ${url}?`);
+      console.log(confirmValue, "confirmValue");
+      unblock();
+      if (confirmValue) {
+        // Unblock the navigation.
+        console.log(url, "consode from inside the conirmvalue true");
+        navigate(url);
+        // tx.retry();
+        return true;
+      } else {
+        blocker();
+        return false;
+      }
+    });
+  }
   useEffect(() => {
     console.log("from outside the popStateHandler log ran");
-    // window.history.pushState(null, null, window.location.pathname);
-    // const popStateHandler = function (event) {
-    //   let confirmValue;
-    //   console.log("from inside the popStateHandler log ran");
-    //   event.preventDefault();
-    //   // The popstate event is fired each time when the current history entry changes.
-    //   confirmValue = confirm("You pressed a Back button! Are you sure?!");
-    //   if (confirmValue === true) {
-    //     // Call Back button programmatically as per user confirmation.
-    //     window.history.back();
-    //     // Uncomment below line to redirect to the previous page instead.
-    //     window.location = document.referrer // Note: IE11 is not supporting this.
-    //   } else {
-    //     // Stay on the current page.
-    //     window.history.pushState(null, null, window.location.pathname);
-    //   }
-    // };
-
-    // const popStateHandler = function (event) {
-    //   console.log("from inside the popStateHandler log ran");
-    //   const confirmValue = confirm("You pressed the Back button! Are you sure you want to leave?");
-    //   if (!confirmValue) {
-    //     // If the user cancels, prevent the back navigation
-    //     event.preventDefault();
-    //   }
-    // };
-    // window.addEventListener("popstate", popStateHandler, false);
-
-    // Block navigation and register a callback that
-    // fires when a navigation attempt is blocked.
     if (showAlert) {
-      let unblock = BrowserHistory.block((tx) => {
-        // Navigation was blocked! Let's show a confirmation dialog
-        // so the user can decide if they actually want to navigate
-        // away and discard changes they've made in the current page.
-        let url = tx.location.pathname;
-        console.log(tx);
-        if (window.confirm(`Are you sure you want to go to ${url}?`)) {
-          // Unblock the navigation.
-          unblock();
-          // Retry the transition.
-          tx.retry();
-        }
-      });
-
-      // const pagehideHandler = function (event) {
-      //   console.log("from inside the pagehideHandler log ran");
-      //   const confirmValue = confirm("You pressed the Back button! Are you sure you want to leave?");
-      //   if (!confirmValue) {
-      //     // If the user cancels, prevent the back navigation
-      //     event.preventDefault();
-      //   }
-      // };
-      // window.addEventListener("visibilitychange", pagehideHandler, false);
-      return unblock;
+      blocker();
     }
+  }, [showAlert, BrowserHistory, navigate]);
+  // const history = createBrowserHistory();
+  // const [isDirty, setIsDirty] = useState(false);
 
-    // () => {
-    //   console.log("from inside the popstate cleaner.");
-    //   // window.removeEventListener("popstate", popStateHandler, false);
-    //   // window.removeEventListener("pagehide", pagehideHandler, false);
-    // };
-  }, [showAlert]);
+  // // This ref is used to save the destination location to which we plan to navigate after the dirty check is complete
+  // const navigateDestination = useRef();
+  // const onConfirmLeave = () => {
+  //   navigateDestination.current?.retry();
+  // };
+
+  // const unblockNavigationRef = useRef();
+
+  // useEffect(() => {
+  //   if (isDirty) {
+  //     // Remove previous block function if exists.
+  //     unblockNavigationRef.current?.();
+  //     // Block route navigation requests when the isDirty flag is on.
+  //     // Instead of navigating when an attempt to navigate happens, save the destination route and render the dirty prompt
+  //     const currentStateValue = isDirty;
+  //     unblockNavigationRef.current = history.block((transition) => {
+  //       navigateDestination.current = transition;
+  //       console.log(navigateDestination);
+  //       const confirmValue = confirm("are you sure?");
+  //       console.log(confirmValue);
+  //       console.log(unblockNavigationRef);
+  //       confirmValue && onConfirmLeave();
+  //       unblockNavigationRef.current?.();
+  //       setIsDirty((currentStateValue)=>{
+  //         console.log(currentStateValue)
+  //         return currentStateValue
+  //       });
+  //     });
+  //   } else {
+  //     // Unblock navigation when the dirty state is cleared
+  //     unblockNavigationRef.current?.();
+  //   }
+  // }, [isDirty, history]);
 
   return (
     <div className="game_wrapper">
       <div className="back_button">
-        <button onClick={showAlertHandler}>Back</button>
+        <button onClick={() => showAlertHandler()}>Back</button>
       </div>
+      {
+        <div>
+          <div>
+            <b>There are some changes?</b>
+            <br /> Are you sure you want to navigate!!!!
+          </div>
+          <button>No</button>
+          <button>Yes</button>
+        </div>
+      }
       <div className="title">
         <h1 className="game_title">Tic Tac Toe Game </h1>
       </div>
