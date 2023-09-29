@@ -3,7 +3,7 @@ import Board from "./Board";
 import History from "./History";
 import PlayAgain from "./PlayAgain";
 import Popup from "reactjs-popup";
-import { Link, useBeforeUnload, useLocation, useNavigate, useNavigation } from "react-router-dom";
+import { Link, Navigate, useBeforeUnload, useLocation, useNavigate, useNavigation } from "react-router-dom";
 import { resetBoard, setTimerEnabled, setTimerLength, startTimer } from "../actions/GameActions";
 import { getBoardContext, getHistoryContext, getTimerContext, getWinnerContext } from "../context/GameContext";
 import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
@@ -61,43 +61,43 @@ function Game() {
   //   }
   // }, [histories]);
 
-  const navigate = useNavigate();
-  let BrowserHistory = createBrowserHistory();
-  const [showAlert, setShowAlert] = useState(false);
+  // const navigate = useNavigate();
+  // let BrowserHistory = createBrowserHistory();
+  // const [showAlert, setShowAlert] = useState(false);
 
-  const showAlertHandler = function () {
-    if (!showAlert) {
-      setShowAlert(true);
-    }
-  };
-  function blocker() {
-    let unblock = BrowserHistory.block((tx) => {
-      // Navigation was blocked! Let's show a confirmation dialog
-      // so the user can decide if they actually want to navigate
-      // away and discard changes they've made in the current page.
-      let url = tx.location.pathname;
-      console.log(url);
-      const confirmValue = window.confirm(`Are you sure you want to go to ${url}?`);
-      console.log(confirmValue, "confirmValue");
-      unblock();
-      if (confirmValue) {
-        // Unblock the navigation.
-        console.log(url, "consode from inside the conirmvalue true");
-        navigate(url);
-        // tx.retry();
-        return true;
-      } else {
-        blocker();
-        return false;
-      }
-    });
-  }
-  useEffect(() => {
-    console.log("from outside the popStateHandler log ran");
-    if (showAlert) {
-      blocker();
-    }
-  }, [showAlert, BrowserHistory, navigate]);
+  // const showAlertHandler = function () {
+  //   if (!showAlert) {
+  //     setShowAlert(true);
+  //   }
+  // };
+  // function blocker() {
+  //   let unblock = BrowserHistory.block((tx) => {
+  //     // Navigation was blocked! Let's show a confirmation dialog
+  //     // so the user can decide if they actually want to navigate
+  //     // away and discard changes they've made in the current page.
+  //     let url = tx.location.pathname;
+  //     console.log(url);
+  //     const confirmValue = window.confirm(`Are you sure you want to go to ${url}?`);
+  //     console.log(confirmValue, "confirmValue");
+  //     unblock();
+  //     if (confirmValue) {
+  //       // Unblock the navigation.
+  //       console.log(url, "consode from inside the conirmvalue true");
+  //       navigate(url);
+  //       // tx.retry();
+  //       return true;
+  //     } else {
+  //       blocker();
+  //       return false;
+  //     }
+  //   });
+  // }
+  // useEffect(() => {
+  //   console.log("from outside the popStateHandler log ran");
+  //   if (showAlert) {
+  //     blocker();
+  //   }
+  // }, [showAlert, BrowserHistory, navigate]);
   // const history = createBrowserHistory();
   // const [isDirty, setIsDirty] = useState(false);
 
@@ -135,10 +135,37 @@ function Game() {
   //   }
   // }, [isDirty, history]);
 
+  const prevPopStateHandler = useRef();
+  const [isDirty, setIsDirty] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isDirty) {
+      const currentRoute = window.location.pathname;
+      prevPopStateHandler.current && window.removeEventListener("popstate", prevPopStateHandler.current);
+      const popStateHandler = function (event) {
+        event.preventDefault();
+        // The popstate event is fired each time when the current history entry changes.
+        const confirmValue = confirm("You pressed a Back button! Are you sure?!");
+        if (confirmValue === true) {
+          navigate(window.location.pathname);
+          prevPopStateHandler.current && window.removeEventListener("popstate", prevPopStateHandler.current);
+        } else {
+          // Stay on the current page.
+          navigate(currentRoute);
+        }
+      };
+      prevPopStateHandler.current = popStateHandler;
+      window.addEventListener("popstate", popStateHandler, false);
+    } else {
+      prevPopStateHandler.current && window.removeEventListener("popstate", prevPopStateHandler.current);
+    }
+  }, [isDirty, location]);
+
   return (
     <div className="game_wrapper">
       <div className="back_button">
-        <button onClick={() => showAlertHandler()}>Back</button>
+        <button onClick={() => setIsDirty(true)}>Back</button>
       </div>
       {
         <div>
