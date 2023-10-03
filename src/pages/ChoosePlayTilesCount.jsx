@@ -9,7 +9,7 @@ const fourBoardArray = Array.from({ length: 4 }, () => Array.from({ length: 4 },
 const fiveBoardArray = Array.from({ length: 5 }, () => Array.from({ length: 5 }, () => boardValueArr[Math.round(Math.random() * 2)]));
 
 function ChoosePlayTilesCount() {
-  const {playingSettings, dispatchPlayingSettings} = getPlayingSettingsContext();
+  const { playingSettings, dispatchPlayingSettings } = getPlayingSettingsContext();
   // if (!playingSettings.playingType) return <Navigate to="/" replace={true} />;
   const [boardContainerHover, setBoardContainerHover] = useState(null);
   const [boardContainerSelected, setBoardContainerSelected] = useState(null);
@@ -149,7 +149,7 @@ function ChoosePlayTilesCount() {
       </div>
       <div>
         <Link to={"/chooseplayinglevel"}>
-          go
+          <button>go</button>
         </Link>
       </div>
     </div>
