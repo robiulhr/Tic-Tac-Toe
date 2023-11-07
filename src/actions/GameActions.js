@@ -29,14 +29,15 @@ const resetBoard = function (dispatch, tilesCount, oldBoard) {
     return upDatedBoard;
 };
 
-const setSquares = function (dispatch, squareIndex, oldBoard) {
+const setSquares = function (dispatch, squareIndex, currentMove, oldBoard) {
     if (typeof dispatch !== "function") throw new Error("setSquares function expect a dispatch function as the first argument.");
-    dispatch({ type: "set", squareIndex });
+    dispatch({ type: "set", squareIndex, currentMove });
     let upDatedBoard = "Old Board not provided";
     if (oldBoard) {
         upDatedBoard = boardReducer(oldBoard, {
             type: "set",
             squareIndex,
+            currentMove
         });
     }
     return upDatedBoard;

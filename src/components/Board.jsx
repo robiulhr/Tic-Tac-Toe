@@ -6,6 +6,7 @@ import { getBoardContext, getHistoryContext, getTimerContext, getWinnerContext }
 import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
 import { addHistories, setNextMove, setSquares, setTimeTravelState, setTimer, setWinner, stopTimer } from "../actions/GameActions";
 import { Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Board({ firstRender, setetIsDirtyHandler }) {
   const { playingSettings } = getPlayingSettingsContext();
@@ -18,7 +19,7 @@ function Board({ firstRender, setetIsDirtyHandler }) {
   const { timerEnabled, timerStatus, timerValue } = timer;
   const winnerTitle = winner && winner !== "Draw" && `Winner : ${winner}`;
   const drawTitle = winner === "Draw" && `Result: Draw`;
-  const nextMoveTitle = `Next Player Move: ${nextMove ? "X" : "O"}`;
+  const nextMoveTitle = `Next Player Move: ${nextMove === 0 ? "O" : "X"}`;
   let squareRows;
   if (!playingSettings.tileCount) return <Navigate to="/" replace={true} />;
   switch (playingSettings.tileCount) {
@@ -36,15 +37,16 @@ function Board({ firstRender, setetIsDirtyHandler }) {
 
   const makeMove = function (squareIndex) {
     if (!squares[squareIndex] && !winner && (timerEnabled ? timerStatus === "running" : timerStatus !== "running")) {
-      console.log(history);
       // make dirty if it is the first move
       if (histories.length === 0) {
         setetIsDirtyHandler(true);
       }
+      // store the move before the nextmove gets updated
+      const currentMove = nextMove;
       // set next move
-      setNextMove(dispatchBoard);
+      setNextMove(dispatchBoard, nextMove);
       // set squares
-      const upDatedBoard = setSquares(dispatchBoard, squareIndex, board);
+      const upDatedBoard = setSquares(dispatchBoard, squareIndex, currentMove, board);
       // reset timetravel state
       setTimeTravelState(dispatchHistory, null);
       // set the history
@@ -56,11 +58,11 @@ function Board({ firstRender, setetIsDirtyHandler }) {
         newHistoryObj.moveTimeTaken = timerValue;
         setTimer(dispatchTimer, 0);
       }
-      addHistories(dispatchHistory, newHistoryObj, timeTravelState);
+      addHistories(dispatchHistory, newHistoryObj, timeTravelState, history);
     } else if (timer.timerEnabled && timer.timerStatus !== "running") {
-      console.log("please, start the timer.");
+      toast.error("please, start the timer.");
     } else if (winner) {
-      console.log("Game has been finished. please start again to play.");
+      toast.info("Game has been finished. please start again to play.");
     }
   };
 
@@ -68,7 +70,7 @@ function Board({ firstRender, setetIsDirtyHandler }) {
     if (!firstRender) {
       // check if any winner found
       const gotWinner = checkBoardWinner(squares);
-      const foundedWinner = !nextMove == 0 ? "O" : "X";
+      const foundedWinner = nextMove === 0 ? "X" : "O";
       if (gotWinner) {
         setWinner(dispatchWinner, foundedWinner);
       } else {

@@ -1,7 +1,7 @@
 const initialPlayingSettings = {
-    tileCount: null,
-    playingLevel: null,
-    playingType: null,
-  };
+  tileCount: null,
+  playingLevel: 'beginner',
+  playingType: null,
+};
 
 export default initialPlayingSettings;

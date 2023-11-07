@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useBeforeUnload, useNavigate, useLocation } from "react-router-dom";
+import { useBeforeUnload, useNavigate } from "react-router-dom";
 
 export default function usePreventPageLeave(homePage) {
   const prevPopStateHandler = useRef();

@@ -5,14 +5,19 @@
 }
 
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
   height: auto;
   background-color: #282c34;
   color: white;
-  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.content_wrapper {
+  min-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
 }
 
 .game_wrapper {
@@ -21,9 +26,39 @@ body {
   align-items: center;
   justify-content: center;
 }
-.back_button{
+
+.game_header {
+  width: 100%;
+}
+
+.back_button {
+  padding: 10px 50px;
+}
+
+.game_content_body {
+  display: flex;
+  align-items: start;
+}
+
+.play_options {
+  margin: 50px;
+  padding: 50px;
+}
+
+button,
+a.button {
+  padding: 10px 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  color: #282c34;
+}
+
+.back_button {
   width: 100%;
   margin: 10px;
+  display: flex;
+  align-items: start;
+  justify-content: start;
 }
 
 .game_title {

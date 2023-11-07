@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
 import { setTileCount } from "../actions/PlayingSettingsActions";
+import { toast } from "react-toastify";
 
 const boardValueArr = ["", 0, "X"];
 const threeBoardArray = Array.from({ length: 3 }, () => Array.from({ length: 3 }, () => boardValueArr[Math.round(Math.random() * 2)]));
@@ -16,13 +17,13 @@ function ChoosePlayTilesCount() {
   const [threeBoardItemHover, setthreeBoardItemHover] = useState(null);
   const [fourBoardItemHover, setFourBoardItemHover] = useState(null);
   const [fiveBoardItemHover, setFiveBoardItemHover] = useState(null);
-
+  const navigate = useNavigate();
   let threeBoardIndex = 0;
   let fourBoardIndex = 0;
   let fiveBoardIndex = 0;
 
   return (
-    <div style={style.chooseTilesCount}>
+    <div className="content_wrapper" style={style.chooseTilesCount}>
       <h2>Choose Tiles Count</h2>
       <div style={style.allTilesContainer}>
         <div
@@ -148,9 +149,13 @@ function ChoosePlayTilesCount() {
         </div>
       </div>
       <div>
-        <Link to={"/chooseplayinglevel"}>
-          <button>go</button>
-        </Link>
+        <button
+          onClick={() => {
+            !boardContainerSelected && typeof boardContainerSelected !== "number" ? toast.error("please, select a board first.") : navigate("/singledevicemultiplayer");
+          }}
+        >
+          Let's go
+        </button>
       </div>
     </div>
   );

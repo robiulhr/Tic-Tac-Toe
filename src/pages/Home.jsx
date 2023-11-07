@@ -12,20 +12,20 @@ function Home() {
   }, []);
 
   return (
-    <div className="home_wrapper">
+    <div className="content_wrapper">
       <h1>Tic Tac Toe Game</h1>
-      <h3>How do you want to play?</h3>
+      {/* <h3>How do you want to play?</h3> */}
       <div className="play_options">
-        <Link to={`chooseplaytilescount`}>
-          <button
-            onClick={() => {
-              setPlayingType(dispatchPlayingSettings, "playWithComputer");
-            }}
-          >
-            Single Device Multiplayer
-          </button>
+        <Link
+          className="button"
+          onClick={() => {
+            setPlayingType(dispatchPlayingSettings, "singledevicemultiplayer");
+          }}
+          to={`singledevicemultiplayer`}
+        >
+          Single Device Multiplayer
         </Link>
-        <Link to={`chooseplaytilescount`}>
+        {/* <Link to={`chooseplaytilescount`}>
           <button
             onClick={() => {
               setPlayingType(dispatchPlayingSettings, "playWithComputer");
@@ -42,7 +42,7 @@ function Home() {
           >
             Play With A Friend
           </button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
