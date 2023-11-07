@@ -38,7 +38,7 @@ const historyReducer = (history, action) => {
     const { type, newHistoryObj, newTimeTravelState } = action;
     switch (type) {
         case "add":
-            return timeTravelState !== null && typeof timeTravelState === "number" ? { ...history, histories: [...histories.slice(0, timeTravelState + 1), newHistoryObj] } : { ...history, histories: [...histories, newHistoryObj] };
+            return typeof newTimeTravelState === "number" ? { ...history, histories: [...histories.slice(0, newTimeTravelState + 1), newHistoryObj] } : { ...history, histories: [...histories, newHistoryObj] };
         case "erase":
             return {
                 histories: [],
