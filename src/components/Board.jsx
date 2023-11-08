@@ -8,7 +8,7 @@ import { addHistories, setNextMove, setSquares, setTimeTravelState, setTimer, se
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-function Board({ firstRender, setetIsDirtyHandler }) {
+function Board({ firstRender, formDirtyHandler }) {
   const { playingSettings } = getPlayingSettingsContext();
   const { board, dispatchBoard } = getBoardContext();
   const { squares, nextMove } = board;
@@ -34,14 +34,11 @@ function Board({ firstRender, setetIsDirtyHandler }) {
       break;
   }
   let squareIndex = 0;
-  useEffect(() => {
-    console.log(nextMove);
-  }, [nextMove]);
   const makeMove = function (squareIndex) {
     if (!squares[squareIndex] && !winner && (timerEnabled ? timerStatus === "running" : timerStatus !== "running")) {
       // make dirty if it is the first move
       if (histories.length === 0) {
-        setetIsDirtyHandler(true);
+        formDirtyHandler(true);
       }
       // store the move before the nextmove gets updated
       const currentMove = nextMove;
@@ -93,7 +90,9 @@ function Board({ firstRender, setetIsDirtyHandler }) {
 
   useEffect(() => {
     if (winner) {
+      toast.success(winner + " has won the match");
       stopTimer(dispatchTimer);
+      formDirtyHandler(false);
     }
   }, [winner]);
 

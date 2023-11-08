@@ -47,7 +47,6 @@ const setSquares = function (dispatch, squareIndex, currentMove, oldBoard) {
 const setSquaresForTimetravel = function (dispatch, historyObj, oldBoard) {
     if (typeof dispatch !== "function") throw new Error("setSquaresForTimetravel function expect a dispatch function as the first argument.");
     const { currentMove, squares } = historyObj
-    console.log(historyObj)
     dispatch({ type: "timeTravel", squares, currentMove });
     let upDatedBoard = "Old Board not provided";
     if (oldBoard) {

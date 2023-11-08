@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import { resetBoard, setTimerEnabled, setTimerLength } from "../actions/GameActions";
 import { getBoardContext, getHistoryContext, getTimerContext, getWinnerContext } from "../context/GameContext";
 import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
-import usePreventPageLeave from "../hooks/usePreventPageLeave";
 import GamePopup from "./GamePopup";
+import FormPrompt from "./pageLeavePrevent";
 function Game() {
   const { board, dispatchBoard } = getBoardContext();
   const { timer, dispatchTimer } = getTimerContext();
@@ -17,14 +17,13 @@ function Game() {
   const { playingSettings } = getPlayingSettingsContext();
   const [firstRender, setFirstRender] = useState(true);
   // prevent the page leave if the user has started playing
-  const { isDirty, setIsDirty } = usePreventPageLeave();
+  const [isDirty, setIsDirty] = useState(false);
 
   useEffect(() => {
     const { playingType, playingLevel, tileCount } = playingSettings;
     // handle timer settings according to the playing settings
     if (playingType === "singleDeviceMultiPlayer" && playingLevel === "beginner") {
       const timerState = setTimerEnabled(dispatchTimer, false);
-      console.log(timerState);
     } else if (playingType === "singleDeviceMultiPlayer" && playingLevel === "medium") {
       setTimerEnabled(dispatchTimer, true);
       setTimerLength(dispatchTimer, "10");
@@ -37,7 +36,7 @@ function Game() {
     setFirstRender(false);
   }, []);
 
-  const setetIsDirtyHandler = useCallback((value) => {
+  const formDirtyHandler = useCallback((value) => {
     return setIsDirty(value);
   }, []);
 
@@ -54,9 +53,9 @@ function Game() {
         </div>
       </div>
       <div className="game_content_body">
-        {<Board firstRender={firstRender} setetIsDirtyHandler={setetIsDirtyHandler} />}
+        <FormPrompt isDirty={isDirty} />
+        {<Board firstRender={firstRender} formDirtyHandler={formDirtyHandler} />}
         {timer.timerEnabled && <GamePopup />}
-
         {histories.length > 0 && <History />}
       </div>
       <div className="game_contents_bottom">{winner && <PlayAgain />}</div>

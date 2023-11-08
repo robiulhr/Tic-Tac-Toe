@@ -1,4 +1,4 @@
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
 import { setPlayingLevel } from "../actions/PlayingSettingsActions";
 import { useNavigate } from "react-router-dom";

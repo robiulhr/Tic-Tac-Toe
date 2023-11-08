@@ -2,7 +2,7 @@ import GoToMove from "./GoToMove";
 import { useState } from "react";
 import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
 import { getBoardContext, getHistoryContext, getTimerContext } from "../context/GameContext";
-import { resetBoard, setNextMove, setSquaresForTimetravel, setTimeTravelState } from "../actions/GameActions";
+import { resetBoard, setSquaresForTimetravel, setTimeTravelState } from "../actions/GameActions";
 
 function History() {
   const { board, dispatchBoard } = getBoardContext();

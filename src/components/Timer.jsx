@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { giveRandomMove } from "../Utils/Utils";
-import { getPlayingSettingsContext } from "../context/PlaySettingsContext";
 import { getBoardContext, getTimerContext } from "../context/GameContext";
 import { setTimer } from "../actions/GameActions";
 
