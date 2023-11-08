@@ -1,8 +1,7 @@
 const boardReducer = (board, action) => {
     if (!action) throw Error("Please, provide the reducer action");
     const { squares, nextMove } = board
-    console.log(nextMove, "nextmove")
-    const { type, squareIndex, historySqures, tilesCount, currentMove } = action;
+    const { type, squareIndex, squares: historySqures, tilesCount, currentMove } = action;
     switch (type) {
         case "reset":
             switch (tilesCount) {
@@ -21,8 +20,9 @@ const boardReducer = (board, action) => {
             const changedElement = currentMove === 0 ? "O" : "x";
             return { ...board, squares: [...squares.slice(0, squareIndex), changedElement, ...squares.slice(squareIndex + 1)] };
         case "timeTravel":
-            if (!historySqures) throw Error("please provide the historySqures to timeTravel.")
-            return { ...board, squares: historySqures };
+            if (!historySqures || typeof currentMove !== "number") throw Error("please provide the historySqures and historyMove to timeTravel.")
+            const updatedNextMove = currentMove === 0 ? 1 : 0;
+            return { ...board, squares: historySqures, nextMove: updatedNextMove };
         case "next":
             return { ...board, nextMove: nextMove === 0 ? 1 : 0 };
         default:

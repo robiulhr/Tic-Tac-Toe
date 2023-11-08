@@ -17,8 +17,7 @@ function History() {
     if (moveCount < 0) {
       resetBoard(dispatchBoard, playingSettings.tileCount);
     } else {
-      setSquaresForTimetravel(dispatchBoard, histories[moveCount].squares);
-      setNextMove(dispatchBoard);
+      setSquaresForTimetravel(dispatchBoard, histories[moveCount]);
     }
     setTimeTravelState(dispatchHistory, moveCount);
   };
@@ -38,15 +37,7 @@ function History() {
         <button onClick={goToGameStartHandler}>Go to game start</button>
       </div>
       {histories.map((ele, ind) => {
-        return (
-          <GoToMove
-            key={ind}
-            moveCount={ind}
-            timeTakenButtonShown={timeTakenButtonShown}
-            timeTakenBtnShownHandler={timeTakenBtnShownHandler}
-            timeTravelHandler={timeTravelHandler}
-          />
-        );
+        return <GoToMove key={ind} moveCount={ind} timeTakenButtonShown={timeTakenButtonShown} timeTakenBtnShownHandler={timeTakenBtnShownHandler} timeTravelHandler={timeTravelHandler} />;
       })}
     </div>
   );

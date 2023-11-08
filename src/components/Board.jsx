@@ -34,7 +34,9 @@ function Board({ firstRender, setetIsDirtyHandler }) {
       break;
   }
   let squareIndex = 0;
-
+  useEffect(() => {
+    console.log(nextMove);
+  }, [nextMove]);
   const makeMove = function (squareIndex) {
     if (!squares[squareIndex] && !winner && (timerEnabled ? timerStatus === "running" : timerStatus !== "running")) {
       // make dirty if it is the first move
@@ -52,7 +54,7 @@ function Board({ firstRender, setetIsDirtyHandler }) {
       // set the history
       const newHistoryObj = {
         squares: upDatedBoard.squares,
-        nextMove,
+        currentMove,
       };
       if (timerEnabled) {
         newHistoryObj.moveTimeTaken = timerValue;

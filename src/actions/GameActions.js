@@ -44,14 +44,17 @@ const setSquares = function (dispatch, squareIndex, currentMove, oldBoard) {
 };
 
 
-const setSquaresForTimetravel = function (dispatch, historySqures, oldBoard) {
+const setSquaresForTimetravel = function (dispatch, historyObj, oldBoard) {
     if (typeof dispatch !== "function") throw new Error("setSquaresForTimetravel function expect a dispatch function as the first argument.");
-    dispatch({ type: "timeTravel", historySqures });
+    const { currentMove, squares } = historyObj
+    console.log(historyObj)
+    dispatch({ type: "timeTravel", squares, currentMove });
     let upDatedBoard = "Old Board not provided";
     if (oldBoard) {
         upDatedBoard = boardReducer(oldBoard, {
             type: "timeTravel",
-            historySqures,
+            squares,
+            currentMove
         });
     }
     return upDatedBoard;
