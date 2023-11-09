@@ -9,6 +9,7 @@ import ChoosePlayTilesCount from "./pages/ChoosePlayTilesCount";
 import PlayingSettingsProvider from "./context/PlaySettingsContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SocialLinks from "./components/socialLinks";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,7 @@ function App() {
   return (
     <div className="App">
       <PlayingSettingsProvider>
+        <SocialLinks />
         <RouterProvider router={router} />
       </PlayingSettingsProvider>
       <ToastContainer />
