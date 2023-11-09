@@ -45,7 +45,7 @@ function App() {
         <SocialLinks />
         <RouterProvider router={router} />
       </PlayingSettingsProvider>
-      <ToastContainer />
+      <ToastContainer position="top-center" />
     </div>
   );
 }

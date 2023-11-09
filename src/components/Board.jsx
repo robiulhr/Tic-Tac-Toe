@@ -90,7 +90,7 @@ function Board({ firstRender, formDirtyHandler }) {
 
   useEffect(() => {
     if (winner) {
-      toast.success(winner + " has won the match");
+      toast.success(winner === "O" || winner === "X" ? `'${winner}'` + " has won the match" : "Match draw.");
       stopTimer(dispatchTimer);
       formDirtyHandler(false);
     }
