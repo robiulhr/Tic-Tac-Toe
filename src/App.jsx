@@ -10,7 +10,6 @@ import PlayingSettingsProvider from "./context/PlaySettingsContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SocialLinks from "./components/socialLinks";
-
 const router = createBrowserRouter(
   [
     {
@@ -38,7 +37,7 @@ const router = createBrowserRouter(
     //   element: <PlayingLevel />,
     // },
   ],
-  { basename: !import.meta.env.DEV ? "/" : "/Tic-Tac-Toe/" }
+  { basename: import.meta.env.BASE_URL }
 );
 
 function App() {
