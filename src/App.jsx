@@ -11,32 +11,35 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SocialLinks from "./components/socialLinks";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/singledevicemultiplayer",
-    element: <SingleDeviceMultiPlayer />,
-  },
-  // {
-  //   path: "/playwithcomputer",
-  //   element: <PlayWithComputer />,
-  // },
-  // {
-  //   path: "/playwithfriend",
-  //   element: <PlayWithAFriend />,
-  // },
-  {
-    path: "/chooseplaytilescount",
-    element: <ChoosePlayTilesCount />,
-  },
-  // {
-  //   path: "/chooseplayinglevel",
-  //   element: <PlayingLevel />,
-  // },
-]);
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Home />,
+    },
+    {
+      path: "/singledevicemultiplayer",
+      element: <SingleDeviceMultiPlayer />,
+    },
+    // {
+    //   path: "/playwithcomputer",
+    //   element: <PlayWithComputer />,
+    // },
+    // {
+    //   path: "/playwithfriend",
+    //   element: <PlayWithAFriend />,
+    // },
+    {
+      path: "/chooseplaytilescount",
+      element: <ChoosePlayTilesCount />,
+    },
+    // {
+    //   path: "/chooseplayinglevel",
+    //   element: <PlayingLevel />,
+    // },
+  ],
+  { basename: !import.meta.env.DEV ? "/" : "/Tic-Tac-Toe/" }
+);
 
 function App() {
   return (
