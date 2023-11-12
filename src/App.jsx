@@ -41,6 +41,7 @@ const router = createBrowserRouter(
 );
 
 function App() {
+  console.log(import.meta.env.BASE_URL);
   return (
     <div className="App">
       <PlayingSettingsProvider>
