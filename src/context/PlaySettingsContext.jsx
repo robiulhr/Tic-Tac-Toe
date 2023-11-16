@@ -11,7 +11,7 @@ function PlayingSettingsProvider({ children }) {
 const getPlayingSettingsContext = () => {
   const { playingSettings, dispatchPlayingSettings } = useContext(PlayingSettingsContext);
   if (playingSettings === undefined || dispatchPlayingSettings === undefined) throw Error("getgetPlayingSettingsContextHistoryContext must be used within a context Provider");
-  return {playingSettings, dispatchPlayingSettings};
+  return { playingSettings, dispatchPlayingSettings };
 };
 
 export default PlayingSettingsProvider;
