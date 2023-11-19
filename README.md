@@ -31,6 +31,6 @@
   },
 ```
 
-Live Demo 1 : https://tic-tac-toe-brown-phi.vercel.app/
+Live Demo 1 : https://tic-tac-toe-virid-eight.vercel.app/
 
 Live Demo 2 : https://robiulhr.github.io/Tic-Tac-Toe/
