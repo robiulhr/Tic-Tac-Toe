@@ -52,7 +52,7 @@ a.button {
   padding: 10px 30px;
   background-color: #fff;
   border-radius: 10px;
-  color: #282c34;
+  /* color: #282c34; */
 }
 
 .back_button {
